@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Header from './Header.jsx';
 import Sidebar from './Sidebar.jsx';
 import Footer from './Footer.jsx';
 import Particles from './Particles.jsx';
-import { recordModuleActive, recordModuleVisit } from '../hooks/useModuleTracking.js';
 import { NavigationContext } from '../context/NavigationContext.js';
+import { recordLoginEvent } from '../hooks/useLoginTracking.js';
 import '../styles/layout.css';
 
 const LoaderOverlay = ({ visible }) => {
@@ -62,7 +62,6 @@ const Layout = ({ children }) => {
   const navigate = useNavigate();
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-  const timerRef = useRef(null);
   const params = useMemo(() => new URLSearchParams(location.search), [location.search]);
   const policeId = params.get('policeid') || '';
 
@@ -79,23 +78,9 @@ const Layout = ({ children }) => {
     [policeId]
   );
 
-  const clearTimer = () => {
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
-      timerRef.current = null;
-    }
-  };
-
   const handleNavigate = useCallback(
     (path, moduleId) => {
-      clearTimer();
       setSidebarVisible(false);
-      if (moduleId) {
-        recordModuleVisit(moduleId);
-        timerRef.current = setTimeout(() => {
-          recordModuleActive(moduleId);
-        }, 10000);
-      }
       setLoading(true);
       setTimeout(() => {
         setLoading(false);
@@ -105,7 +90,12 @@ const Layout = ({ children }) => {
     [buildLink, navigate]
   );
 
-  useEffect(() => () => clearTimer(), []);
+  useEffect(() => {
+    if (!policeId) {
+      return;
+    }
+    recordLoginEvent(policeId);
+  }, [policeId]);
 
   const handleMainClick = () => {
     if (sidebarVisible) {

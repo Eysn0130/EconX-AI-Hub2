@@ -1,16 +1,63 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { navSections } from '../data/navigation.js';
-import { recordModuleActive, recordModuleVisit } from '../hooks/useModuleTracking.js';
+import {
+  recordModuleActive,
+  recordModuleTimeSpent,
+  recordModuleVisit,
+} from '../hooks/useModuleTracking.js';
 import { usePoliceId } from '../hooks/usePoliceId.js';
 import { withPoliceId } from '../utils/navigation.js';
+import { recordLoginEvent } from '../hooks/useLoginTracking.js';
 import '../styles/sideNavLayout.css';
 
-const SideNavLayout = ({ icon, title, subtitle, iframeSrc, iframeAllow = 'microphone' }) => {
+const SideNavLayout = ({ icon, title, subtitle, iframeSrc, iframeAllow = 'microphone', moduleId }) => {
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const policeId = usePoliceId();
+  const sessionRef = useRef({ moduleId: null, start: null });
+  const timerRef = useRef(null);
+
+  useEffect(() => {
+    if (!moduleId) {
+      return undefined;
+    }
+
+    recordModuleVisit(moduleId);
+    sessionRef.current = { moduleId, start: Date.now() };
+    timerRef.current = setTimeout(() => {
+      recordModuleActive(moduleId);
+      timerRef.current = null;
+    }, 10000);
+
+    const handleBeforeUnload = () => {
+      if (!moduleId || !sessionRef.current.start) {
+        return;
+      }
+      recordModuleTimeSpent(moduleId, Date.now() - sessionRef.current.start);
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+        timerRef.current = null;
+      }
+      if (moduleId && sessionRef.current.start) {
+        recordModuleTimeSpent(moduleId, Date.now() - sessionRef.current.start);
+        sessionRef.current = { moduleId: null, start: null };
+      }
+    };
+  }, [moduleId]);
+
+  useEffect(() => {
+    if (policeId) {
+      recordLoginEvent(policeId);
+    }
+  }, [policeId]);
 
   useEffect(() => {
     setSidebarVisible(false);
@@ -18,8 +65,6 @@ const SideNavLayout = ({ icon, title, subtitle, iframeSrc, iframeAllow = 'microp
 
   const navigateTo = (path, moduleId) => {
     const target = withPoliceId(path, policeId);
-    recordModuleVisit(moduleId);
-    setTimeout(() => recordModuleActive(moduleId), 10000);
     navigate(target);
   };
 

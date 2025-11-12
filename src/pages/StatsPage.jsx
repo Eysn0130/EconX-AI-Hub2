@@ -3,27 +3,20 @@ import { useNavigate } from 'react-router-dom';
 import '../styles/stats.css';
 import { usePoliceId } from '../hooks/usePoliceId.js';
 import { withPoliceId } from '../utils/navigation.js';
-import {
-  moduleAnalytics,
-  moduleCategoryOptions,
-  timeframeOptions,
-  usageTrendData,
-  satisfactionTrend,
-  moduleUsageByHour,
-  ratingDistribution,
-  loginStatsByUnit,
-} from '../data/stats.js';
+import { timeframeOptions, ratingColorScale, hourlySegments } from '../data/stats.js';
+import { navSections } from '../data/navigation.js';
 import { getModuleStats } from '../hooks/useModuleTracking.js';
+import { getLoginStats } from '../hooks/useLoginTracking.js';
 
 const formatNumber = (value) => value.toLocaleString('zh-CN');
 const formatPercent = (value) => `${(value * 100).toFixed(1)}%`;
-const formatScorePercent = (score) => `${((score / 5) * 100).toFixed(1)}%`;
+const clampScore = (value) => Math.max(0, Math.min(5, value));
 
 const HorizontalBars = ({ data }) => {
   if (!data.length) {
     return <div className="stats-empty">暂无数据</div>;
   }
-  const maxValue = Math.max(...data.map((item) => item.visits));
+  const maxValue = Math.max(...data.map((item) => item.visits), 1);
   return (
     <div className="stats-hbar-list">
       {data.map((item) => {
@@ -35,10 +28,7 @@ const HorizontalBars = ({ data }) => {
               <span className="stats-hbar-value">{formatNumber(item.visits)}</span>
             </div>
             <div className="stats-hbar-track" aria-hidden="true">
-              <div
-                className="stats-hbar-fill"
-                style={{ width: `${width}%` }}
-              >
+              <div className="stats-hbar-fill" style={{ width: `${width}%` }}>
                 <span>{formatPercent(item.usageRate)}</span>
               </div>
             </div>
@@ -50,28 +40,33 @@ const HorizontalBars = ({ data }) => {
 };
 
 const LineChart = ({ data, durationSeries }) => {
+  if (!data.length) {
+    return <div className="stats-empty">暂无趋势数据</div>;
+  }
   const width = 100;
   const height = 100;
-  const maxValue = Math.max(...data.map((point) => Math.max(point.visits, point.activeUsers)));
-  const maxDuration = Math.max(...durationSeries.map((point) => point.score ?? point.avgDuration));
+  const valuePoints = data.map((point) => Math.max(point.visits, point.activeUsers || 0));
+  const maxValue = valuePoints.length ? Math.max(...valuePoints) : 0;
+  const durationValues = durationSeries.map((point) => point.score ?? point.avgDuration ?? 0);
+  const maxDuration = durationValues.length ? Math.max(...durationValues) : 0;
   const visitsPoints = data
     .map((point, index) => {
       const x = (index / Math.max(data.length - 1, 1)) * width;
-      const y = height - (point.visits / (maxValue || 1)) * height;
+      const y = height - (maxValue ? (point.visits / maxValue) * height : 0);
       return `${x},${y}`;
     })
     .join(' ');
   const activePoints = data
     .map((point, index) => {
       const x = (index / Math.max(data.length - 1, 1)) * width;
-      const y = height - (point.activeUsers / (maxValue || 1)) * height;
+      const y = height - (maxValue ? (point.activeUsers / maxValue) * height : 0);
       return `${x},${y}`;
     })
     .join(' ');
   const durationPoints = durationSeries
     .map((point, index) => {
       const x = (index / Math.max(durationSeries.length - 1, 1)) * width;
-      const y = height - ((point.score ?? point.avgDuration) / (maxDuration || 1)) * height;
+      const y = height - (maxDuration ? ((point.score ?? point.avgDuration) / maxDuration) * height : 0);
       return `${x},${y}`;
     })
     .join(' ');
@@ -97,6 +92,9 @@ const LineChart = ({ data, durationSeries }) => {
 };
 
 const RatingDistribution = ({ data }) => {
+  if (!data.length) {
+    return <div className="stats-empty">暂无评分数据</div>;
+  }
   const total = data.reduce((sum, item) => sum + item.value, 0);
   return (
     <div className="stats-rating-grid">
@@ -122,7 +120,10 @@ const RatingDistribution = ({ data }) => {
 };
 
 const HourlyUsage = ({ data }) => {
-  const maxSessions = Math.max(...data.map((item) => item.sessions));
+  if (!data.length) {
+    return <div className="stats-empty">暂无时间分布</div>;
+  }
+  const maxSessions = Math.max(...data.map((item) => item.sessions), 1);
   return (
     <div className="stats-hourly-grid">
       {data.map((item) => {
@@ -139,26 +140,65 @@ const HourlyUsage = ({ data }) => {
   );
 };
 
+const deriveModuleMetadata = (moduleStats) => {
+  const metaMap = new Map();
+  navSections.forEach((section) => {
+    section.items.forEach((item) => {
+      if (!item.moduleId || metaMap.has(item.moduleId)) {
+        return;
+      }
+      metaMap.set(item.moduleId, {
+        id: item.moduleId,
+        name: item.label,
+        category: section.title,
+      });
+    });
+  });
+
+  Object.keys(moduleStats).forEach((moduleId) => {
+    if (!metaMap.has(moduleId)) {
+      metaMap.set(moduleId, {
+        id: moduleId,
+        name: moduleId,
+        category: '其他模块',
+      });
+    }
+  });
+
+  return Array.from(metaMap.values());
+};
+
+const formatTrendLabel = (date, days) => {
+  if (days <= 7) {
+    return date.toLocaleDateString('zh-CN', { weekday: 'short' });
+  }
+  if (days <= 31) {
+    return `${date.getMonth() + 1}/${date.getDate()}`;
+  }
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+};
+
 const StatsPage = () => {
   const navigate = useNavigate();
   const policeId = usePoliceId();
   const [selectedTimeframe, setSelectedTimeframe] = useState(timeframeOptions[0].id);
-  const [selectedCategory, setSelectedCategory] = useState(moduleCategoryOptions[0].id);
+  const [selectedCategory, setSelectedCategory] = useState('all');
   const [moduleStats, setModuleStats] = useState({});
+  const [loginStats, setLoginStats] = useState(() => getLoginStats());
 
   useEffect(() => {
-    setModuleStats(getModuleStats());
+    const update = () => setModuleStats(getModuleStats());
+    update();
     const handleStorageChange = (event) => {
       if (!event || event.key === 'moduleVisitStats') {
-        setModuleStats(getModuleStats());
+        update();
       }
     };
     const handleVisibility = () => {
       if (document.visibilityState === 'visible') {
-        setModuleStats(getModuleStats());
+        update();
       }
     };
-
     window.addEventListener('storage', handleStorageChange);
     document.addEventListener('visibilitychange', handleVisibility);
     return () => {
@@ -167,55 +207,207 @@ const StatsPage = () => {
     };
   }, []);
 
-  const enrichedModules = useMemo(() =>
-    moduleAnalytics
-      .map((module) => {
-        const tracked = moduleStats[module.id] || {};
-        const visits = module.baselineVisits + (tracked.visits || 0);
-        const activeSessions = module.baselineActiveSessions + (tracked.active || 0);
-        const usageRate = visits === 0 ? 0 : activeSessions / visits;
-        return {
-          ...module,
-          visits,
-          activeSessions,
-          usageRate,
-        };
-      })
-      .sort((a, b) => b.visits - a.visits),
-  [moduleStats]);
+  useEffect(() => {
+    const update = () => setLoginStats(getLoginStats());
+    update();
+    const handleStorageChange = (event) => {
+      if (!event || event.key === 'loginStats') {
+        update();
+      }
+    };
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        update();
+      }
+    };
+    window.addEventListener('storage', handleStorageChange);
+    document.addEventListener('visibilitychange', handleVisibility);
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      document.removeEventListener('visibilitychange', handleVisibility);
+    };
+  }, []);
 
-  const filteredModules = useMemo(() =>
-    selectedCategory === 'all'
-      ? enrichedModules
-      : enrichedModules.filter((module) => module.category === selectedCategory),
-  [enrichedModules, selectedCategory]);
+  const moduleMetadata = useMemo(() => deriveModuleMetadata(moduleStats), [moduleStats]);
+
+  const moduleCategoryOptions = useMemo(() => {
+    const categories = Array.from(new Set(moduleMetadata.map((item) => item.category)));
+    return [{ id: 'all', label: '全部模块' }, ...categories.map((category) => ({ id: category, label: category }))];
+  }, [moduleMetadata]);
+
+  useEffect(() => {
+    if (selectedCategory === 'all') {
+      return;
+    }
+    const exists = moduleCategoryOptions.some((option) => option.id === selectedCategory);
+    if (!exists) {
+      setSelectedCategory('all');
+    }
+  }, [moduleCategoryOptions, selectedCategory]);
+
+  const enrichedModules = useMemo(
+    () =>
+      moduleMetadata
+        .map((module) => {
+          const tracked = moduleStats[module.id] || {};
+          const visits = tracked.visits || 0;
+          const activeSessions = tracked.active || 0;
+          const usageRate = visits ? Math.min(activeSessions / visits, 1) : 0;
+          const totalMinutes = tracked.timeSpent || 0;
+          const avgDuration = tracked.avgDuration || (visits ? totalMinutes / visits : 0);
+          const satisfaction = visits
+            ? clampScore(2.5 + usageRate * 2 + Math.min(avgDuration / 15, 1.5))
+            : 0;
+          return {
+            ...module,
+            visits,
+            activeSessions,
+            usageRate,
+            avgDuration,
+            satisfaction,
+            totalMinutes,
+            lastVisit: tracked.lastVisit || 0,
+            dailyData: Array.isArray(tracked.dailyData) ? tracked.dailyData : [],
+            hourlyData: Array.isArray(tracked.hourlyData) ? tracked.hourlyData : [],
+          };
+        })
+        .sort((a, b) => b.visits - a.visits),
+    [moduleMetadata, moduleStats]
+  );
+
+  const filteredModules = useMemo(
+    () =>
+      selectedCategory === 'all'
+        ? enrichedModules
+        : enrichedModules.filter((module) => module.category === selectedCategory),
+    [enrichedModules, selectedCategory]
+  );
 
   const summaryStats = useMemo(() => {
     const totalVisits = enrichedModules.reduce((sum, module) => sum + module.visits, 0);
     const totalActive = enrichedModules.reduce((sum, module) => sum + module.activeSessions, 0);
-    const weightedDuration = enrichedModules.reduce(
-      (sum, module) => sum + module.avgDuration * module.visits,
-      0
-    );
-    const weightedSatisfaction = enrichedModules.reduce(
-      (sum, module) => sum + module.satisfaction * module.visits,
-      0
-    );
-    const avgDuration = totalVisits ? weightedDuration / totalVisits : 0;
-    const avgSatisfaction = totalVisits ? weightedSatisfaction / totalVisits : 0;
+    const totalMinutes = enrichedModules.reduce((sum, module) => sum + module.totalMinutes, 0);
+    const avgDuration = totalVisits ? totalMinutes / totalVisits : 0;
+    const avgSatisfaction = totalVisits
+      ? enrichedModules.reduce((sum, module) => sum + module.satisfaction * module.visits, 0) / totalVisits
+      : 0;
     const activeRate = totalVisits ? totalActive / totalVisits : 0;
-    const activeUnits = loginStatsByUnit.filter((unit) => unit.coverage >= 0.75).length;
+
     return {
       totalVisits,
       avgDuration,
       avgSatisfaction,
       activeRate,
-      activeUnits,
     };
   }, [enrichedModules]);
 
-  const trendSeries = usageTrendData[selectedTimeframe] || [];
-  const satisfactionSeries = satisfactionTrend[selectedTimeframe] || [];
+  const aggregatedDaily = useMemo(() => {
+    const map = new Map();
+    enrichedModules.forEach((module) => {
+      module.dailyData.forEach((day) => {
+        const existing = map.get(day.date) || { visits: 0, active: 0, timeSpent: 0 };
+        existing.visits += day.visits || 0;
+        existing.active += day.active || 0;
+        existing.timeSpent += day.timeSpent || 0;
+        map.set(day.date, existing);
+      });
+    });
+    return map;
+  }, [enrichedModules]);
+
+  const timeframe = timeframeOptions.find((option) => option.id === selectedTimeframe) || timeframeOptions[0];
+
+  const trendSeries = useMemo(() => {
+    const series = [];
+    const today = new Date();
+    for (let offset = timeframe.days - 1; offset >= 0; offset -= 1) {
+      const date = new Date(today);
+      date.setDate(today.getDate() - offset);
+      const key = date.toISOString().split('T')[0];
+      const bucket = aggregatedDaily.get(key) || { visits: 0, active: 0, timeSpent: 0 };
+      const avgDuration = bucket.visits ? bucket.timeSpent / bucket.visits : 0;
+      series.push({
+        key,
+        label: formatTrendLabel(date, timeframe.days),
+        visits: bucket.visits,
+        activeUsers: bucket.active,
+        avgDuration,
+      });
+    }
+    return series;
+  }, [aggregatedDaily, timeframe.days]);
+
+  const satisfactionSeries = useMemo(
+    () =>
+      trendSeries.map((point) => {
+        const usageRate = point.visits ? point.activeUsers / point.visits : 0;
+        const score = point.visits
+          ? clampScore(2.5 + usageRate * 2 + Math.min(point.avgDuration / 15, 1.5))
+          : 0;
+        return { label: point.label, score };
+      }),
+    [trendSeries]
+  );
+
+  const moduleUsageByHour = useMemo(() => {
+    const totals = Array.from({ length: 24 }, () => ({ visits: 0 }));
+    enrichedModules.forEach((module) => {
+      module.hourlyData.forEach((slot) => {
+        if (typeof slot.hour !== 'number') {
+          return;
+        }
+        const hour = Math.min(23, Math.max(0, slot.hour));
+        totals[hour].visits += slot.visits || 0;
+      });
+    });
+    return hourlySegments.map((segment) => {
+      const sessions = totals
+        .slice(segment.start, segment.end + 1)
+        .reduce((sum, slot) => sum + (slot.visits || 0), 0);
+      return { label: segment.label, sessions };
+    });
+  }, [enrichedModules]);
+
+  const ratingDistribution = useMemo(() => {
+    const buckets = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+    enrichedModules.forEach((module) => {
+      if (!module.visits) {
+        return;
+      }
+      const bucketScore = Math.round(clampScore(module.satisfaction)) || 1;
+      buckets[bucketScore] += 1;
+    });
+    return Object.entries(buckets).map(([score, value]) => ({
+      label: `${score}分`,
+      value,
+      color: ratingColorScale[score] || '#1f77ff',
+    }));
+  }, [enrichedModules]);
+
+  const loginStatsByUnit = useMemo(() => {
+    const units = loginStats.units || {};
+    const entries = Object.entries(units).map(([unitName, stats]) => {
+      const activeUsers = stats.users ? Object.keys(stats.users).length : 0;
+      const avgLoginsPerUser = activeUsers ? stats.logins / activeUsers : 0;
+      const satisfaction = activeUsers ? clampScore(2.5 + Math.min(avgLoginsPerUser, 5) * 0.5) : 0;
+      return {
+        unit: unitName,
+        logins: stats.logins || 0,
+        activeUsers,
+        lastLogin: stats.lastLogin || 0,
+        satisfaction,
+      };
+    });
+    const totalActiveUsers = entries.reduce((sum, entry) => sum + entry.activeUsers, 0);
+    return entries
+      .map((entry) => ({
+        ...entry,
+        coverage: totalActiveUsers ? entry.activeUsers / totalActiveUsers : 0,
+      }))
+      .sort((a, b) => b.logins - a.logins);
+  }, [loginStats]);
+
+  const activeUnits = loginStatsByUnit.filter((unit) => unit.activeUsers > 0).length;
 
   return (
     <div className="stats-page">
@@ -242,7 +434,7 @@ const StatsPage = () => {
       <main className="stats-main">
         <section className="stats-overview">
           <h1>平台运行概览</h1>
-          <p>实时掌握各业务模块的访问频次、使用时长、用户满意度与单位活跃度</p>
+          <p>实时掌握各业务模块的访问频次、使用时长、活跃度与单位登录情况</p>
         </section>
 
         <section className="stats-controls" aria-label="统计维度选择">
@@ -305,8 +497,15 @@ const StatsPage = () => {
             <div className="stats-summary-icon">
               <i className="fa-solid fa-face-smile" />
             </div>
-            <div className="stats-summary-value">{formatScorePercent(summaryStats.avgSatisfaction)}</div>
+            <div className="stats-summary-value">{summaryStats.avgSatisfaction.toFixed(2)}</div>
             <div className="stats-summary-label">满意度评率</div>
+          </div>
+          <div className="stats-summary-card">
+            <div className="stats-summary-icon">
+              <i className="fa-solid fa-building-user" />
+            </div>
+            <div className="stats-summary-value">{activeUnits}</div>
+            <div className="stats-summary-label">活跃单位数</div>
           </div>
         </section>
 
