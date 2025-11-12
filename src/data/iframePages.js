@@ -1,6 +1,7 @@
 export const iframePages = [
   {
     path: '/general-ai',
+    moduleId: 'general-ai',
     icon: 'fa-solid fa-robot',
     title: '通用AI助手',
     subtitle: 'General AI Assistant',
@@ -9,6 +10,7 @@ export const iframePages = [
   },
   {
     path: '/general-case',
+    moduleId: 'general-case',
     icon: 'fa-solid fa-magnifying-glass-chart',
     title: '通用领域案件研判',
     subtitle: 'General Case Analysis',
@@ -17,6 +19,7 @@ export const iframePages = [
   },
   {
     path: '/doc-writing',
+    moduleId: 'doc-writing',
     icon: 'fa-solid fa-pen-fancy',
     title: '公安公文写作',
     subtitle: 'Police Document Writing',
@@ -25,6 +28,7 @@ export const iframePages = [
   },
   {
     path: '/finance-case',
+    moduleId: 'finance-case',
     icon: 'fa-solid fa-landmark',
     title: '金融领域',
     subtitle: 'Financial Crime',
@@ -33,6 +37,7 @@ export const iframePages = [
   },
   {
     path: '/securities-case',
+    moduleId: 'securities-case',
     icon: 'fa-solid fa-chart-simple',
     title: '证券领域',
     subtitle: 'Securities Crime',
@@ -41,6 +46,7 @@ export const iframePages = [
   },
   {
     path: '/tax-case',
+    moduleId: 'tax-case',
     icon: 'fa-solid fa-receipt',
     title: '涉税领域',
     subtitle: 'Tax Crime',
@@ -49,6 +55,7 @@ export const iframePages = [
   },
   {
     path: '/trade-case',
+    moduleId: 'trade-case',
     icon: 'fa-solid fa-store',
     title: '商贸领域',
     subtitle: 'Trade Crime',
@@ -57,6 +64,7 @@ export const iframePages = [
   },
   {
     path: '/money-laundering',
+    moduleId: 'money-laundering',
     icon: 'fa-solid fa-money-bill-transfer',
     title: '反洗钱领域',
     subtitle: 'Anti Money Laundering',
@@ -65,6 +73,7 @@ export const iframePages = [
   },
   {
     path: '/case-guide',
+    moduleId: 'case-guide',
     icon: 'fa-solid fa-compass',
     title: '办案指引',
     subtitle: 'Case Guidance',
@@ -73,6 +82,7 @@ export const iframePages = [
   },
   {
     path: '/data-analysis',
+    moduleId: 'data-analysis',
     icon: 'fa-solid fa-chart-pie',
     title: '数据分析',
     subtitle: 'Data Analysis',
@@ -81,6 +91,7 @@ export const iframePages = [
   },
   {
     path: '/evidence-analysis',
+    moduleId: 'evidence-analysis',
     icon: 'fa-solid fa-scale-balanced',
     title: '金析为证',
     subtitle: 'Evidence Analysis',
@@ -89,6 +100,7 @@ export const iframePages = [
   },
   {
     path: '/person-info-analysis',
+    moduleId: 'person-info-analysis',
     icon: 'fa-solid fa-user',
     title: '人员基础信息分析',
     subtitle: 'Person Info Analysis',
@@ -97,6 +109,7 @@ export const iframePages = [
   },
   {
     path: '/police-data-analysis',
+    moduleId: 'police-data-analysis',
     icon: 'fa-solid fa-chart-line',
     title: '警情数据分析',
     subtitle: 'Police Data Analysis',

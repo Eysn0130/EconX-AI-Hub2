@@ -10,6 +10,7 @@ export const iframePageComponents = iframePages.reduce((acc, config) => {
       subtitle={config.subtitle}
       iframeSrc={config.iframeSrc}
       iframeAllow={config.allow}
+      moduleId={config.moduleId}
     />
   );
   return acc;

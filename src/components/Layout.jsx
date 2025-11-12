@@ -1,11 +1,12 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Header from './Header.jsx';
 import Sidebar from './Sidebar.jsx';
 import Footer from './Footer.jsx';
 import Particles from './Particles.jsx';
-import { recordModuleActive, recordModuleVisit } from '../hooks/useModuleTracking.js';
 import { NavigationContext } from '../context/NavigationContext.js';
+import { recordLoginEvent } from '../hooks/useLoginTracking.js';
+import { withPoliceId } from '../utils/navigation.js';
 import '../styles/layout.css';
 
 const LoaderOverlay = ({ visible }) => {
@@ -62,50 +63,34 @@ const Layout = ({ children }) => {
   const navigate = useNavigate();
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-  const timerRef = useRef(null);
   const params = useMemo(() => new URLSearchParams(location.search), [location.search]);
   const policeId = params.get('policeid') || '';
 
-  const buildLink = useCallback(
-    (path) => {
-      const cleanPath = path === '/' ? '/' : path;
-      if (!policeId || typeof window === 'undefined') {
-        return cleanPath;
-      }
-      const url = new URL(cleanPath, window.location.origin);
-      url.searchParams.set('policeid', policeId);
-      return `${url.pathname}${url.search}`;
-    },
-    [policeId]
-  );
-
-  const clearTimer = () => {
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
-      timerRef.current = null;
-    }
-  };
+  const buildLink = useCallback((path) => withPoliceId(path, policeId), [policeId]);
 
   const handleNavigate = useCallback(
     (path, moduleId) => {
-      clearTimer();
       setSidebarVisible(false);
-      if (moduleId) {
-        recordModuleVisit(moduleId);
-        timerRef.current = setTimeout(() => {
-          recordModuleActive(moduleId);
-        }, 10000);
-      }
       setLoading(true);
       setTimeout(() => {
         setLoading(false);
-        navigate(buildLink(path));
+        const target = buildLink(path);
+        if (typeof window !== 'undefined' && window.location.pathname.endsWith('.html')) {
+          window.location.href = new URL(target, window.location.origin);
+        } else {
+          navigate(target);
+        }
       }, 300);
     },
     [buildLink, navigate]
   );
 
-  useEffect(() => () => clearTimer(), []);
+  useEffect(() => {
+    if (!policeId) {
+      return;
+    }
+    recordLoginEvent(policeId);
+  }, [policeId]);
 
   const handleMainClick = () => {
     if (sidebarVisible) {
