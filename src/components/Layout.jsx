@@ -6,6 +6,7 @@ import Footer from './Footer.jsx';
 import Particles from './Particles.jsx';
 import { NavigationContext } from '../context/NavigationContext.js';
 import { recordLoginEvent } from '../hooks/useLoginTracking.js';
+import { withPoliceId } from '../utils/navigation.js';
 import '../styles/layout.css';
 
 const LoaderOverlay = ({ visible }) => {
@@ -65,18 +66,7 @@ const Layout = ({ children }) => {
   const params = useMemo(() => new URLSearchParams(location.search), [location.search]);
   const policeId = params.get('policeid') || '';
 
-  const buildLink = useCallback(
-    (path) => {
-      const cleanPath = path === '/' ? '/' : path;
-      if (!policeId || typeof window === 'undefined') {
-        return cleanPath;
-      }
-      const url = new URL(cleanPath, window.location.origin);
-      url.searchParams.set('policeid', policeId);
-      return `${url.pathname}${url.search}`;
-    },
-    [policeId]
-  );
+  const buildLink = useCallback((path) => withPoliceId(path, policeId), [policeId]);
 
   const handleNavigate = useCallback(
     (path, moduleId) => {
@@ -84,7 +74,12 @@ const Layout = ({ children }) => {
       setLoading(true);
       setTimeout(() => {
         setLoading(false);
-        navigate(buildLink(path));
+        const target = buildLink(path);
+        if (typeof window !== 'undefined' && window.location.pathname.endsWith('.html')) {
+          window.location.href = new URL(target, window.location.origin);
+        } else {
+          navigate(target);
+        }
       }, 300);
     },
     [buildLink, navigate]

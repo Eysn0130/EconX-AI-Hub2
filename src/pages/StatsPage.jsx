@@ -181,6 +181,7 @@ const formatTrendLabel = (date, days) => {
 const StatsPage = () => {
   const navigate = useNavigate();
   const policeId = usePoliceId();
+  const homeLink = useMemo(() => withPoliceId('/', policeId), [policeId]);
   const [selectedTimeframe, setSelectedTimeframe] = useState(timeframeOptions[0].id);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [moduleStats, setModuleStats] = useState({});
@@ -420,11 +421,15 @@ const StatsPage = () => {
           </div>
         </div>
         <a
-          href={withPoliceId('/', policeId)}
+          href={homeLink}
           className="stats-back-link"
           onClick={(event) => {
             event.preventDefault();
-            navigate(withPoliceId('/', policeId));
+            if (typeof window !== 'undefined' && window.location.pathname.endsWith('.html')) {
+              window.location.href = new URL(homeLink, window.location.origin);
+            } else {
+              navigate(homeLink);
+            }
           }}
         >
           <i className="fa-solid fa-house" />
