@@ -1,0 +1,148 @@
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.dashboard-title {
+  font-size: 1.8rem;
+  color: var(--police-dark);
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.dashboard-subtitle {
+  color: var(--police-text-secondary);
+  font-size: 1rem;
+  max-width: 600px;
+}
+
+.dashboard-stats {
+  display: flex;
+  gap: 1rem;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 16px;
+  padding: 1.2rem 1.5rem 1.4rem;
+  min-width: 150px;
+  box-shadow: var(--neumorphic-light);
+  text-align: center;
+  border: var(--glass-border);
+  transition: var(--transition-bounce);
+  backdrop-filter: blur(5px);
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-icon {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.2rem;
+  opacity: 0.5;
+  color: var(--police-blue);
+  transition: all 0.3s;
+}
+
+.stat-card:nth-child(1) .stat-icon {
+  color: #3498db;
+}
+
+.stat-card:nth-child(2) .stat-icon {
+  color: #4a6fa5;
+}
+
+.stat-card:nth-child(3) .stat-icon {
+  color: #e74c3c;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+  opacity: 0;
+  transform: scale(1.5);
+  transition: all 0.5s ease;
+  pointer-events: none;
+}
+
+.stat-card:hover::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.stat-value {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 2px 10px rgba(26, 62, 114, 0.08);
+}
+
+.stat-card:nth-child(1) .stat-value {
+  background: linear-gradient(135deg, #1a3e72, #3498db);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.stat-card:nth-child(2) .stat-value {
+  background: linear-gradient(135deg, #2c3e50, #4a6fa5);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.stat-card:nth-child(3) .stat-value {
+  background: linear-gradient(135deg, #c0392b, #e74c3c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: var(--police-text-primary);
+  font-weight: 600;
+  margin-bottom: 3px;
+}
+
+.stat-desc {
+  font-size: 0.75rem;
+  color: var(--police-text-secondary);
+  opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+  }
+
+  .dashboard-stats {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .stat-card {
+    flex: 1;
+    min-width: 90px;
+    padding: 0.8rem 1rem;
+  }
+
+  .stat-value {
+    font-size: 1.4rem;
+  }
+}

@@ -1,0 +1,53 @@
+.login2-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f0f2f5;
+  font-family: 'Microsoft YaHei', sans-serif;
+}
+
+.login2-container {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 3rem;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+  width: 90%;
+  max-width: 500px;
+  backdrop-filter: blur(15px);
+}
+
+.login2-key {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.login2-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1a3e72;
+  margin-bottom: 0.5rem;
+}
+
+.login2-link {
+  font-size: 1.1rem;
+  color: #e74c3c;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.login2-link:hover {
+  color: #0d1f3a;
+}
+
+.login2-desc {
+  font-size: 1rem;
+  color: #666;
+  margin-top: 0.2rem;
+}

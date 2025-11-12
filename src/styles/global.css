@@ -1,0 +1,72 @@
+:root {
+  --police-blue: #1a3e72;
+  --police-light: #4a6fa5;
+  --police-dark: #0d1f3a;
+  --police-accent: #e74c3c;
+  --police-gray: #f5f7fa;
+  --police-success: #27ae60;
+  --police-warning: #f39c12;
+  --police-info: #3498db;
+  --police-text-primary: #2c3e50;
+  --police-text-secondary: #7f8c8d;
+  --primary-gradient: linear-gradient(135deg, #1a3e72, #3498db);
+  --accent-gradient: linear-gradient(45deg, #e74c3c, #ff7675);
+  --dark-gradient: linear-gradient(135deg, #0d1f3a, #2c3e50);
+  --card-glow: 0 8px 32px rgba(26, 62, 114, 0.15);
+  --glass-effect: rgba(255, 255, 255, 0.85);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.18);
+  --neumorphic-light: 8px 8px 16px rgba(0, 0, 0, 0.05), -8px -8px 16px rgba(255, 255, 255, 0.8);
+  --neumorphic-dark: 8px 8px 16px rgba(0, 0, 0, 0.2), -8px -8px 16px rgba(255, 255, 255, 0.05);
+  --transition-standard: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  min-height: 100%;
+}
+
+body {
+  font-family: 'Microsoft YaHei', 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+  background: linear-gradient(135deg, #f5f7fa, #e8eef5);
+  color: var(--police-text-primary);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-attachment: fixed;
+}
+
+body.dark-mode {
+  --police-blue: #2980b9;
+  --police-light: #3498db;
+  --police-dark: #1e272e;
+  --police-gray: #2f3640;
+  --police-text-primary: #ecf0f1;
+  --police-text-secondary: #bdc3c7;
+  --primary-gradient: linear-gradient(135deg, #2980b9, #3498db);
+  --dark-gradient: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  --glass-effect: rgba(15, 32, 39, 0.8);
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364) fixed;
+  color: var(--police-text-primary);
+}
+
+body.dark-mode .workflow-card,
+body.dark-mode .stat-card {
+  background: rgba(22, 33, 62, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+a {
+  color: inherit;
+}
+
+ul {
+  list-style: none;
+}

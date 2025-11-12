@@ -1,0 +1,125 @@
+.chrome-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 30px 20px;
+  font-family: 'Microsoft YaHei', sans-serif;
+  background-color: #fff;
+  color: #202124;
+  line-height: 1.6;
+}
+
+.chrome-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.chrome-logo {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 10px;
+}
+
+.chrome-header h1 {
+  font-size: 28px;
+  color: #1a73e8;
+  margin-bottom: 10px;
+}
+
+.chrome-subtitle {
+  color: #5f6368;
+  font-size: 16px;
+}
+
+.chrome-card {
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.chrome-card h2 {
+  font-size: 20px;
+  margin-bottom: 15px;
+  color: #1a73e8;
+}
+
+.chrome-step {
+  display: flex;
+  margin-bottom: 15px;
+  align-items: flex-start;
+}
+
+.chrome-step-number {
+  background-color: #1a73e8;
+  color: white;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 15px;
+  flex-shrink: 0;
+}
+
+.chrome-step-content {
+  flex: 1;
+}
+
+.chrome-warning {
+  background-color: #fef7e6;
+  border-left: 4px solid #fbbc05;
+  padding: 15px;
+  margin: 20px 0;
+}
+
+.chrome-tip {
+  background-color: #e8f0fe;
+  border-left: 4px solid #4285f4;
+  padding: 15px;
+  margin: 20px 0;
+}
+
+.chrome-button {
+  background-color: #1a73e8;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-block;
+  text-decoration: none;
+  margin: 10px 0;
+  transition: background-color 0.3s;
+}
+
+.chrome-button:hover {
+  background-color: #4285f4;
+}
+
+.chrome-note {
+  font-size: 14px;
+  color: #5f6368;
+  margin-top: 10px;
+}
+
+.chrome-footer {
+  margin-top: 40px;
+  text-align: center;
+  color: #5f6368;
+  font-size: 14px;
+}
+
+@media (max-width: 600px) {
+  .chrome-container {
+    padding: 20px 16px;
+  }
+  .chrome-step {
+    flex-direction: column;
+  }
+  .chrome-step-number {
+    margin-bottom: 10px;
+  }
+}
