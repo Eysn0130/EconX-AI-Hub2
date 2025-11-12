@@ -1,70 +1,37 @@
-经济犯罪侦查工作平台 - 页面索引
+# 经智AI智能体工作平台（Vite + React 版本）
 
-1. 主要页面
----------------
-index.html          - 平台主页，包含所有功能模块入口
+本项目使用 [Vite](https://vitejs.dev) 与 React 重新构建原有的经智AI智能体工作平台，保持了原始界面的排版与样式布局，并在单页应用架构下提供多个业务模块。
 
-2. 通用功能
----------------
-general-ai.html     - 通用AI助手，提供智能对话界面
-general-case.html   - 通用案件研判，包含案件管理和研判功能
-doc-writing.html    - 公文写作助手，提供文书写作辅助功能
+## 项目结构
 
-3. 专业领域
----------------
-finance-case.html   - 金融领域，包含金融犯罪分析和研判
-securities-case.html - 证券领域，包含市场监控和异常分析
-tax-case.html       - 涉税领域，包含发票分析和风险预警
-trade-case.html     - 商贸领域，包含交易监控和趋势分析
-money-laundering.html - 反洗钱领域，包含资金流向分析和预警
+```
+├── index.html            # Vite 入口文件
+├── package.json
+├── src
+│   ├── App.jsx           # 路由配置
+│   ├── main.jsx          # 应用入口
+│   ├── components        # 公共组件（顶部导航、侧边栏等）
+│   ├── context           # 全局上下文
+│   ├── data              # 导航、卡片配置
+│   ├── hooks             # 自定义 Hook
+│   ├── pages             # 各业务页面
+│   └── styles            # 样式文件
+└── vite.config.js
+```
 
-4. 研判工具
----------------
-person-info-analysis.html - 人员基础信息分析，提供嫌疑人信息综合研判
-police-data-analysis.html - 警情数据分析，提供警情统计和趋势研判
+## 可用脚本
 
-5. 辅助工具
----------------
-evidence-analysis.html - 金析为证，提供证据分析和管理功能
-case-guide.html     - 办案指引，提供案件办理规范和指导
-data-analysis.html  - 数据分析，提供多维度数据分析功能
+- `npm install` 安装依赖（首次需要外网环境）
+- `npm run dev` 启动开发服务器
+- `npm run build` 生产构建
+- `npm run preview` 预览生产构建结果
 
-页面设计特点：
-1. 统一的设计风格和配色方案
-   - 使用警察蓝色系：深蓝(#1a3e72)、浅蓝(#4a6fa5)
-   - 统一的渐变背景和阴影效果
-   - 一致的字体和图标样式
+## 访问说明
 
-2. 响应式布局，适配不同设备
-   - 桌面端完整显示
-   - 移动端自适应布局
-   - 侧边栏自动收缩
+- 主页：`/`
+- 模块页面：`/general-ai`、`/finance-case` 等（详见 `src/data/iframePages.js`）
+- 统计分析：`/stats`
+- 登录页：`/login`、`/login2`
+- 浏览器安装指南：`/chrome-installer`
 
-3. 导航系统
-   - 固定顶部导航栏
-   - 可收缩侧边导航栏
-   - 面包屑导航路径
-
-4. 界面元素
-   - Font Awesome图标库
-   - 统一的按钮样式
-   - 一致的卡片设计
-   - 平滑的动画过渡
-
-5. 功能特性
-   - iframe内容加载
-   - 实时日期显示
-   - 页面间无缝跳转
-   - 返回首页功能
-
-6. 技术实现
-   - HTML5语义化标签
-   - CSS3现代特性
-   - 响应式Grid布局
-   - JavaScript交互
-   - 模块化组织结构 
-
-7. 服务器
-   - 地址：83.3.23.117，端口：22222
-   - 账号：root
-   - 密码：Jzzd@qbk037880
+系统支持携带 `policeid` 查询参数，页面间跳转会自动保留该参数。
