@@ -10,6 +10,7 @@ export const backIframePageComponents = backIframePages.reduce((acc, config) => 
       iframeSrc={config.iframeSrc}
       icon={config.icon}
       allow={config.allow}
+      moduleId={config.moduleId}
     />
   );
   return acc;
