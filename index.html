@@ -1575,17 +1575,27 @@
 
     // 初始化模块访问统计
     function initModuleStats() {
-      // 从localStorage获取或初始化统计数据
-      let moduleStats = localStorage.getItem('moduleVisitStats');
-      moduleStats = moduleStats ? JSON.parse(moduleStats) : {};
-      return moduleStats;
+      if (window.ModuleTracker) {
+        return window.ModuleTracker.loadStats();
+      }
+      try {
+        const moduleStats = localStorage.getItem('moduleVisitStats');
+        return moduleStats ? JSON.parse(moduleStats) : {};
+      } catch (error) {
+        console.warn('无法解析本地统计数据:', error);
+        return {};
+      }
     }
 
     // 记录模块访问
     function recordModuleVisit(moduleId) {
+      if (!moduleId) return;
+      if (window.ModuleTracker) {
+        window.ModuleTracker.recordVisit(moduleId);
+        return;
+      }
+
       const stats = initModuleStats();
-      
-      // 初始化或更新模块的访问统计
       if (!stats[moduleId]) {
         stats[moduleId] = {
           visits: 0,
@@ -1593,19 +1603,21 @@
           lastVisit: Date.now()
         };
       }
-      
-      // 增加访问次数
+
       stats[moduleId].visits++;
       stats[moduleId].lastVisit = Date.now();
-      
-      // 保存回localStorage
       localStorage.setItem('moduleVisitStats', JSON.stringify(stats));
     }
 
     // 记录活跃度（在页面停留时间超过10秒）
     function recordModuleActive(moduleId) {
+      if (!moduleId) return;
+      if (window.ModuleTracker) {
+        window.ModuleTracker.recordActive(moduleId);
+        return;
+      }
+
       const stats = initModuleStats();
-      
       if (stats[moduleId]) {
         stats[moduleId].active++;
         localStorage.setItem('moduleVisitStats', JSON.stringify(stats));
