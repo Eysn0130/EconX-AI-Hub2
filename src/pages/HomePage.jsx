@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { moduleCards } from '../data/navigation.js';
 import { NavigationContext } from '../context/NavigationContext.js';
 import useScrollReveal from '../hooks/useScrollReveal.js';
