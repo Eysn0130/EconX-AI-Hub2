@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { moduleCards } from '../data/navigation.js';
 import { NavigationContext } from '../context/NavigationContext.js';
 import '../styles/layout.css';
@@ -39,6 +39,39 @@ const statCards = [
 const HomePage = () => {
   const { navigateTo } = useContext(NavigationContext);
 
+  useEffect(() => {
+    const elements = document.querySelectorAll('.reveal-on-scroll');
+    if (!elements.length) return undefined;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const { target, isIntersecting } = entry;
+          if (isIntersecting) {
+            target.classList.add('is-visible');
+          } else {
+            target.classList.remove('is-visible');
+          }
+        });
+      },
+      {
+        threshold: 0.2,
+        rootMargin: '0px 0px -10% 0px',
+      },
+    );
+
+    elements.forEach((element, index) => {
+      if (!element.style.getPropertyValue('--reveal-delay')) {
+        element.style.setProperty('--reveal-delay', `${Math.min(index * 70, 350)}ms`);
+      }
+      observer.observe(element);
+    });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   const handleCardClick = (card) => {
     if (!card) return;
     navigateTo(card.path, card.id);
@@ -74,12 +107,13 @@ const HomePage = () => {
         }
         return (
           <div className="module-section" key={section.title}>
-            <h2 className="section-title fade-in">{section.title}</h2>
+            <h2 className="section-title reveal-on-scroll">{section.title}</h2>
             <div className="workflow-cards">
-              {cards.map((card) => (
+              {cards.map((card, index) => (
                 <div
                   key={card.id}
-                  className="workflow-card fade-in"
+                  className="workflow-card reveal-on-scroll"
+                  style={{ '--reveal-delay': `${index * 60}ms` }}
                   onClick={() => handleCardClick(card)}
                   role="button"
                   tabIndex={0}
