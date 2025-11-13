@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { moduleCards } from '../data/navigation.js';
 import { NavigationContext } from '../context/NavigationContext.js';
+import useScrollReveal from '../hooks/useScrollReveal.js';
 import '../styles/layout.css';
 import '../styles/home.css';
 
@@ -39,38 +40,7 @@ const statCards = [
 const HomePage = () => {
   const { navigateTo } = useContext(NavigationContext);
 
-  useEffect(() => {
-    const elements = document.querySelectorAll('.reveal-on-scroll');
-    if (!elements.length) return undefined;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const { target, isIntersecting } = entry;
-          if (isIntersecting) {
-            target.classList.add('is-visible');
-          } else {
-            target.classList.remove('is-visible');
-          }
-        });
-      },
-      {
-        threshold: 0.2,
-        rootMargin: '0px 0px -10% 0px',
-      },
-    );
-
-    elements.forEach((element, index) => {
-      if (!element.style.getPropertyValue('--reveal-delay')) {
-        element.style.setProperty('--reveal-delay', `${Math.min(index * 70, 350)}ms`);
-      }
-      observer.observe(element);
-    });
-
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
+  useScrollReveal();
 
   const handleCardClick = (card) => {
     if (!card) return;
@@ -87,8 +57,16 @@ const HomePage = () => {
           </p>
         </div>
         <div className="dashboard-stats fade-in" style={{ animationDelay: '.2s' }}>
-          {statCards.map((stat) => (
-            <div key={stat.label} className="stat-card">
+          {statCards.map((stat, index) => (
+            <div
+              key={stat.label}
+              className="stat-card reveal-on-scroll"
+              data-reveal-duration="680ms"
+              data-reveal-type="zoom-in"
+              data-reveal-index={index}
+              data-reveal-step="80"
+              data-reveal-max-delay="320"
+            >
               <div className="stat-icon">
                 <i className={stat.icon} />
               </div>
@@ -106,14 +84,31 @@ const HomePage = () => {
           return null;
         }
         return (
-          <div className="module-section" key={section.title}>
-            <h2 className="section-title reveal-on-scroll">{section.title}</h2>
-            <div className="workflow-cards">
+          <div
+            className="module-section reveal-on-scroll"
+            data-reveal-duration="720ms"
+            data-reveal-type="fade"
+            data-reveal-delay="60ms"
+            key={section.title}
+          >
+            <h2
+              className="section-title reveal-on-scroll"
+              data-reveal-duration="620ms"
+              data-reveal-type="slide-left"
+              data-reveal-delay="90ms"
+            >
+              {section.title}
+            </h2>
+            <div className="workflow-cards" data-reveal-group={section.title}>
               {cards.map((card, index) => (
                 <div
                   key={card.id}
                   className="workflow-card reveal-on-scroll"
-                  style={{ '--reveal-delay': `${index * 60}ms` }}
+                  data-reveal-duration="760ms"
+                  data-reveal-type={index % 2 === 0 ? 'slide-right' : 'slide-left'}
+                  data-reveal-index={index}
+                  data-reveal-step="90"
+                  data-reveal-max-delay="450"
                   onClick={() => handleCardClick(card)}
                   role="button"
                   tabIndex={0}
