@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { moduleCards } from '../data/navigation.js';
 import { NavigationContext } from '../context/NavigationContext.js';
 import '../styles/layout.css';
@@ -39,6 +39,63 @@ const statCards = [
 const HomePage = () => {
   const { navigateTo } = useContext(NavigationContext);
 
+  useEffect(() => {
+    const elements = Array.from(document.querySelectorAll('.reveal-on-scroll'));
+
+    if (!elements.length) {
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries, currentObserver) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) {
+            return;
+          }
+
+          const { target } = entry;
+
+          if (!target.style.getPropertyValue('--reveal-delay')) {
+            const group = target.dataset.revealGroup;
+
+            if (group) {
+              const siblings = Array.from(
+                document.querySelectorAll(`.reveal-on-scroll[data-reveal-group="${group}"]`),
+              );
+              const index = siblings.indexOf(target);
+              if (index >= 0) {
+                target.style.setProperty('--reveal-delay', `${Math.min(index * 80, 400)}ms`);
+              }
+            }
+          }
+
+          if (target.dataset.revealDuration) {
+            target.style.setProperty('--reveal-duration', target.dataset.revealDuration);
+          }
+
+          target.classList.add('is-visible');
+          currentObserver.unobserve(target);
+        });
+      },
+      {
+        threshold: 0.25,
+        rootMargin: '0px 0px -12% 0px',
+      },
+    );
+
+    elements.forEach((element, index) => {
+      if (!element.dataset.revealGroup && !element.style.getPropertyValue('--reveal-delay')) {
+        element.style.setProperty('--reveal-delay', `${Math.min(index * 70, 350)}ms`);
+      }
+
+      observer.observe(element);
+    });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   const handleCardClick = (card) => {
     if (!card) return;
     navigateTo(card.path, card.id);
@@ -54,8 +111,14 @@ const HomePage = () => {
           </p>
         </div>
         <div className="dashboard-stats fade-in" style={{ animationDelay: '.2s' }}>
-          {statCards.map((stat) => (
-            <div key={stat.label} className="stat-card">
+          {statCards.map((stat, index) => (
+            <div
+              key={stat.label}
+              className="stat-card reveal-on-scroll"
+              data-reveal-duration="680ms"
+              data-reveal-type="zoom-in"
+              style={{ '--reveal-delay': `${index * 80}ms` }}
+            >
               <div className="stat-icon">
                 <i className={stat.icon} />
               </div>
@@ -73,13 +136,29 @@ const HomePage = () => {
           return null;
         }
         return (
-          <div className="module-section" key={section.title}>
-            <h2 className="section-title fade-in">{section.title}</h2>
-            <div className="workflow-cards">
-              {cards.map((card) => (
+          <div
+            className="module-section reveal-on-scroll"
+            data-reveal-duration="720ms"
+            data-reveal-type="fade"
+            key={section.title}
+          >
+            <h2
+              className="section-title reveal-on-scroll"
+              data-reveal-duration="620ms"
+              data-reveal-type="slide-left"
+              style={{ '--reveal-delay': '90ms' }}
+            >
+              {section.title}
+            </h2>
+            <div className="workflow-cards" data-reveal-group={section.title}>
+              {cards.map((card, index) => (
                 <div
                   key={card.id}
-                  className="workflow-card fade-in"
+                  className="workflow-card reveal-on-scroll"
+                  data-reveal-group={section.title}
+                  data-reveal-duration="760ms"
+                  data-reveal-type={index % 2 === 0 ? 'slide-right' : 'slide-left'}
+                  style={{ '--reveal-delay': `${index * 70}ms` }}
                   onClick={() => handleCardClick(card)}
                   role="button"
                   tabIndex={0}
