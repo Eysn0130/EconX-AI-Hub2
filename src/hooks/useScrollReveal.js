@@ -12,17 +12,17 @@ const assignTimingProperties = (element, fallbackIndex) => {
     revealIndex,
     revealStep,
     revealMaxDelay,
+    revealTilt,
+    revealElevation,
   } = element.dataset;
 
   let delay = revealDelay;
+  const parsedIndex = revealIndex !== undefined ? Number(revealIndex) : Number.NaN;
 
-  if (!delay && revealIndex !== undefined) {
-    const parsedIndex = Number(revealIndex);
-    if (!Number.isNaN(parsedIndex)) {
-      const step = Number(revealStep ?? 80);
-      const maxDelay = Number(revealMaxDelay ?? 400);
-      delay = `${Math.min(parsedIndex * step, maxDelay)}ms`;
-    }
+  if (!delay && !Number.isNaN(parsedIndex)) {
+    const step = Number(revealStep ?? 80);
+    const maxDelay = Number(revealMaxDelay ?? 400);
+    delay = `${Math.min(parsedIndex * step, maxDelay)}ms`;
   }
 
   if (!delay) {
@@ -39,6 +39,22 @@ const assignTimingProperties = (element, fallbackIndex) => {
 
   if (revealEasing) {
     element.style.setProperty('--reveal-easing', revealEasing);
+  }
+
+  if (revealElevation && !element.style.getPropertyValue('--reveal-depth')) {
+    element.style.setProperty('--reveal-depth', revealElevation);
+  } else if (!element.style.getPropertyValue('--reveal-depth')) {
+    const baseDepth = 48 + fallbackIndex * 6;
+    element.style.setProperty('--reveal-depth', `${Math.min(baseDepth, 112)}px`);
+  }
+
+  if (revealTilt) {
+    element.style.setProperty('--reveal-tilt', revealTilt);
+  } else if (!Number.isNaN(parsedIndex)) {
+    const tiltDirection = parsedIndex % 2 === 0 ? -1 : 1;
+    element.style.setProperty('--reveal-tilt', `${tiltDirection * 7}deg`);
+  } else if (!element.style.getPropertyValue('--reveal-tilt')) {
+    element.style.setProperty('--reveal-tilt', '0deg');
   }
 };
 
