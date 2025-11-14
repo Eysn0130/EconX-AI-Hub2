@@ -41,16 +41,18 @@ const assignTimingProperties = (element, fallbackIndex) => {
     element.style.setProperty('--reveal-easing', revealEasing);
   }
 
+  const isWorkflowCard = element.classList.contains('workflow-card');
+
   if (revealElevation && !element.style.getPropertyValue('--reveal-depth')) {
     element.style.setProperty('--reveal-depth', revealElevation);
-  } else if (!element.style.getPropertyValue('--reveal-depth')) {
+  } else if (!element.style.getPropertyValue('--reveal-depth') && !isWorkflowCard) {
     const baseDepth = 48 + fallbackIndex * 6;
     element.style.setProperty('--reveal-depth', `${Math.min(baseDepth, 112)}px`);
   }
 
   if (revealTilt) {
     element.style.setProperty('--reveal-tilt', revealTilt);
-  } else if (!Number.isNaN(parsedIndex)) {
+  } else if (!Number.isNaN(parsedIndex) && !isWorkflowCard) {
     const tiltDirection = parsedIndex % 2 === 0 ? -1 : 1;
     element.style.setProperty('--reveal-tilt', `${tiltDirection * 7}deg`);
   } else if (!element.style.getPropertyValue('--reveal-tilt')) {
