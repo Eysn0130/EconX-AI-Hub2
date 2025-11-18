@@ -96,9 +96,34 @@ const useScrollReveal = () => {
 
     const fallbackIndices = new Map();
     const resettableElements = new WeakSet();
+    const deckStates = new Map();
     let observer;
 
     const isResettable = (element) => resettableElements.has(element);
+
+    const getDeckForElement = (element) => {
+      if (!element) {
+        return undefined;
+      }
+      return element.closest('[data-reveal-deck]');
+    };
+
+    const updateDeckState = (element, isRevealed) => {
+      const deck = getDeckForElement(element);
+      if (!deck) {
+        return;
+      }
+
+      const current = deckStates.get(deck) ?? 0;
+      const next = Math.max(0, current + (isRevealed ? 1 : -1));
+      deckStates.set(deck, next);
+
+      if (next > 0) {
+        deck.classList.add('deck-is-expanded');
+      } else {
+        deck.classList.remove('deck-is-expanded');
+      }
+    };
 
     const revealElement = (element) => {
       if (!element || element.classList.contains('is-visible')) {
@@ -108,6 +133,7 @@ const useScrollReveal = () => {
       const fallbackIndex = fallbackIndices.get(element) ?? 0;
       assignTimingProperties(element, fallbackIndex);
       element.classList.add('is-visible');
+      updateDeckState(element, true);
       if (observer && !isResettable(element)) {
         observer.unobserve(element);
       }
@@ -119,6 +145,7 @@ const useScrollReveal = () => {
       }
 
       element.classList.remove('is-visible');
+      updateDeckState(element, false);
     };
 
     elements.forEach((element, index) => {
@@ -126,6 +153,11 @@ const useScrollReveal = () => {
       assignTimingProperties(element, index);
       if (element.dataset.revealReset === 'true') {
         resettableElements.add(element);
+      }
+      const deck = getDeckForElement(element);
+      if (deck && !deckStates.has(deck)) {
+        deckStates.set(deck, 0);
+        deck.classList.remove('deck-is-expanded');
       }
     });
 
