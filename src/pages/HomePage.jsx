@@ -105,7 +105,6 @@ const HomePage = () => {
                   key={card.id}
                   className="workflow-card reveal-on-scroll"
                   data-reveal-duration="760ms"
-                  data-reveal-type={index % 2 === 0 ? 'slide-right' : 'slide-left'}
                   data-reveal-index={index}
                   data-reveal-step="90"
                   data-reveal-max-delay="450"
