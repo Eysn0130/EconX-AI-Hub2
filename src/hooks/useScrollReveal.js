@@ -60,16 +60,26 @@ const assignTimingProperties = (element, fallbackIndex) => {
   }
 };
 
-const shouldReveal = (element, viewportHeight) => {
-  if (!element) {
-    return false;
+const getVisibilityStatus = (element, viewportHeight) => {
+  if (!element || !viewportHeight) {
+    return 'idle';
   }
 
   const rect = element.getBoundingClientRect();
-  const upperTriggerLine = viewportHeight * 0.88;
-  const lowerTriggerLine = viewportHeight * 0.05;
+  const revealUpperLine = viewportHeight * 0.68;
+  const revealLowerLine = viewportHeight * 0.18;
+  const hideUpperLine = viewportHeight * 0.08;
+  const hideLowerLine = viewportHeight * 1.08;
 
-  return rect.top <= upperTriggerLine && rect.bottom >= lowerTriggerLine;
+  if (rect.top <= revealUpperLine && rect.bottom >= revealLowerLine) {
+    return 'show';
+  }
+
+  if (rect.bottom < hideUpperLine || rect.top > hideLowerLine) {
+    return 'hide';
+  }
+
+  return 'idle';
 };
 
 const useScrollReveal = () => {
@@ -85,7 +95,10 @@ const useScrollReveal = () => {
     }
 
     const fallbackIndices = new Map();
+    const resettableElements = new WeakSet();
     let observer;
+
+    const isResettable = (element) => resettableElements.has(element);
 
     const revealElement = (element) => {
       if (!element || element.classList.contains('is-visible')) {
@@ -95,25 +108,41 @@ const useScrollReveal = () => {
       const fallbackIndex = fallbackIndices.get(element) ?? 0;
       assignTimingProperties(element, fallbackIndex);
       element.classList.add('is-visible');
-      if (observer) {
+      if (observer && !isResettable(element)) {
         observer.unobserve(element);
       }
+    };
+
+    const hideElement = (element) => {
+      if (!element || !element.classList.contains('is-visible')) {
+        return;
+      }
+
+      element.classList.remove('is-visible');
     };
 
     elements.forEach((element, index) => {
       fallbackIndices.set(element, index);
       assignTimingProperties(element, index);
+      if (element.dataset.revealReset === 'true') {
+        resettableElements.add(element);
+      }
     });
 
     const runManualCheck = () => {
       const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 0;
       elements.forEach((element) => {
-        if (element.classList.contains('is-visible')) {
+        const resettable = isResettable(element);
+        if (!resettable && element.classList.contains('is-visible')) {
           return;
         }
 
-        if (shouldReveal(element, viewportHeight)) {
+        const visibilityStatus = getVisibilityStatus(element, viewportHeight);
+
+        if (visibilityStatus === 'show') {
           revealElement(element);
+        } else if (resettable && visibilityStatus === 'hide') {
+          hideElement(element);
         }
       });
     };
@@ -124,11 +153,11 @@ const useScrollReveal = () => {
       observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
-            if (!entry.isIntersecting) {
-              return;
+            if (entry.isIntersecting) {
+              revealElement(entry.target);
+            } else if (isResettable(entry.target)) {
+              hideElement(entry.target);
             }
-
-            revealElement(entry.target);
           });
         },
         {

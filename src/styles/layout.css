@@ -695,6 +695,87 @@
   backdrop-filter: blur(5px);
 }
 
+.workflow-cards[data-reveal-deck='case'] {
+  position: relative;
+}
+
+.workflow-cards[data-reveal-deck='case'] .workflow-card.reveal-on-scroll {
+  --reveal-rotate-z: 0deg;
+}
+
+.workflow-cards[data-reveal-deck='case'] .workflow-card.reveal-on-scroll:not(.is-visible) {
+  --reveal-scale: 0.72;
+  --reveal-rotate: 56deg;
+  --reveal-translate-z: -260px;
+  --reveal-perspective: 1400px;
+  --reveal-depth: 180px;
+  --reveal-translate-x: 0px;
+  --reveal-tilt: 0deg;
+  transform-origin: center 150%;
+  box-shadow: 0 34px 84px rgba(9, 32, 68, 0.24);
+  transition: none;
+}
+
+.workflow-cards[data-reveal-deck='case'] .workflow-card.reveal-on-scroll:nth-child(1):not(.is-visible) {
+  --reveal-translate-x: -280px;
+  --reveal-rotate-z: -32deg;
+  --reveal-tilt: -20deg;
+  --reveal-scale: 0.66;
+  --reveal-depth: 240px;
+  --reveal-translate-z: -320px;
+  z-index: 2;
+}
+
+.workflow-cards[data-reveal-deck='case'] .workflow-card.reveal-on-scroll:nth-child(2):not(.is-visible) {
+  --reveal-translate-x: -160px;
+  --reveal-rotate-z: -20deg;
+  --reveal-tilt: -12deg;
+  --reveal-scale: 0.72;
+  --reveal-depth: 210px;
+  --reveal-translate-z: -280px;
+  z-index: 4;
+}
+
+.workflow-cards[data-reveal-deck='case'] .workflow-card.reveal-on-scroll:nth-child(3):not(.is-visible) {
+  --reveal-translate-x: -40px;
+  --reveal-rotate-z: -8deg;
+  --reveal-tilt: -6deg;
+  --reveal-scale: 0.78;
+  --reveal-depth: 190px;
+  --reveal-translate-z: -240px;
+  z-index: 6;
+}
+
+.workflow-cards[data-reveal-deck='case'] .workflow-card.reveal-on-scroll:nth-child(4):not(.is-visible) {
+  --reveal-translate-x: 40px;
+  --reveal-rotate-z: 8deg;
+  --reveal-tilt: 6deg;
+  --reveal-scale: 0.78;
+  --reveal-depth: 190px;
+  --reveal-translate-z: -240px;
+  z-index: 7;
+}
+
+.workflow-cards[data-reveal-deck='case'] .workflow-card.reveal-on-scroll:nth-child(5):not(.is-visible) {
+  --reveal-translate-x: 160px;
+  --reveal-rotate-z: 20deg;
+  --reveal-tilt: 14deg;
+  --reveal-scale: 0.72;
+  --reveal-depth: 210px;
+  --reveal-translate-z: -280px;
+  z-index: 5;
+}
+
+.workflow-cards[data-reveal-deck='case'] .workflow-card.reveal-on-scroll:nth-child(6):not(.is-visible) {
+  --reveal-translate-x: 280px;
+  --reveal-rotate-z: 32deg;
+  --reveal-tilt: 20deg;
+  --reveal-scale: 0.66;
+  --reveal-depth: 240px;
+  --reveal-translate-z: -320px;
+  z-index: 3;
+}
+
 .reveal-on-scroll {
   opacity: 0;
   transform: perspective(var(--reveal-perspective, 1200px))
@@ -753,21 +834,17 @@
 }
 
 @supports (transform-style: preserve-3d) {
-  .workflow-cards[data-reveal-group] {
+  .workflow-cards[data-reveal-deck='case'][data-reveal-group] {
     perspective: 1600px;
     perspective-origin: center 120%;
     transform-style: preserve-3d;
   }
 
-  .workflow-card {
+  .workflow-cards[data-reveal-deck='case'] .workflow-card {
     transform-style: preserve-3d;
   }
 
-  .workflow-card.reveal-on-scroll {
-    --reveal-rotate-z: 0deg;
-  }
-
-  .workflow-card.reveal-on-scroll:not(.is-visible) {
+  .workflow-cards[data-reveal-deck='case'] .workflow-card.reveal-on-scroll:not(.is-visible) {
     --reveal-scale: 0.72;
     --reveal-rotate: 56deg;
     --reveal-translate-z: -260px;
@@ -780,7 +857,7 @@
     transition: none;
   }
 
-  .workflow-card.reveal-on-scroll:nth-child(1):not(.is-visible) {
+  .workflow-cards[data-reveal-deck='case'] .workflow-card.reveal-on-scroll:nth-child(1):not(.is-visible) {
     --reveal-translate-x: -280px;
     --reveal-rotate-z: -32deg;
     --reveal-tilt: -20deg;
@@ -790,7 +867,7 @@
     z-index: 2;
   }
 
-  .workflow-card.reveal-on-scroll:nth-child(2):not(.is-visible) {
+  .workflow-cards[data-reveal-deck='case'] .workflow-card.reveal-on-scroll:nth-child(2):not(.is-visible) {
     --reveal-translate-x: -160px;
     --reveal-rotate-z: -20deg;
     --reveal-tilt: -14deg;
@@ -800,7 +877,7 @@
     z-index: 4;
   }
 
-  .workflow-card.reveal-on-scroll:nth-child(3):not(.is-visible) {
+  .workflow-cards[data-reveal-deck='case'] .workflow-card.reveal-on-scroll:nth-child(3):not(.is-visible) {
     --reveal-translate-x: -60px;
     --reveal-rotate-z: -10deg;
     --reveal-tilt: -8deg;
@@ -810,7 +887,7 @@
     z-index: 6;
   }
 
-  .workflow-card.reveal-on-scroll:nth-child(4):not(.is-visible) {
+  .workflow-cards[data-reveal-deck='case'] .workflow-card.reveal-on-scroll:nth-child(4):not(.is-visible) {
     --reveal-translate-x: 60px;
     --reveal-rotate-z: 10deg;
     --reveal-tilt: 8deg;
@@ -820,7 +897,7 @@
     z-index: 7;
   }
 
-  .workflow-card.reveal-on-scroll:nth-child(5):not(.is-visible) {
+  .workflow-cards[data-reveal-deck='case'] .workflow-card.reveal-on-scroll:nth-child(5):not(.is-visible) {
     --reveal-translate-x: 160px;
     --reveal-rotate-z: 20deg;
     --reveal-tilt: 14deg;
@@ -830,7 +907,7 @@
     z-index: 5;
   }
 
-  .workflow-card.reveal-on-scroll:nth-child(6):not(.is-visible) {
+  .workflow-cards[data-reveal-deck='case'] .workflow-card.reveal-on-scroll:nth-child(6):not(.is-visible) {
     --reveal-translate-x: 280px;
     --reveal-rotate-z: 32deg;
     --reveal-tilt: 20deg;
@@ -896,7 +973,7 @@
   }
 
   @media (max-width: 900px) {
-    .workflow-card.reveal-on-scroll:not(.is-visible) {
+    .workflow-cards[data-reveal-deck='case'] .workflow-card.reveal-on-scroll:not(.is-visible) {
       --reveal-translate-x: 0px;
       --reveal-rotate-z: 0deg;
       --reveal-tilt: 0deg;
@@ -906,7 +983,7 @@
       transform-origin: center 130%;
     }
 
-    .workflow-card.reveal-on-scroll:nth-child(n):not(.is-visible) {
+    .workflow-cards[data-reveal-deck='case'] .workflow-card.reveal-on-scroll:nth-child(n):not(.is-visible) {
       z-index: 1;
     }
   }
