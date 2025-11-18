@@ -96,7 +96,8 @@ const useScrollReveal = () => {
 
     const fallbackIndices = new Map();
     const resettableElements = new WeakSet();
-    const deckStates = new Map();
+    const deckConfigs = new Map();
+    const deckCardElements = new WeakSet();
     let observer;
 
     const isResettable = (element) => resettableElements.has(element);
@@ -108,23 +109,6 @@ const useScrollReveal = () => {
       return element.closest('[data-reveal-deck]');
     };
 
-    const updateDeckState = (element, isRevealed) => {
-      const deck = getDeckForElement(element);
-      if (!deck) {
-        return;
-      }
-
-      const current = deckStates.get(deck) ?? 0;
-      const next = Math.max(0, current + (isRevealed ? 1 : -1));
-      deckStates.set(deck, next);
-
-      if (next > 0) {
-        deck.classList.add('deck-is-expanded');
-      } else {
-        deck.classList.remove('deck-is-expanded');
-      }
-    };
-
     const revealElement = (element) => {
       if (!element || element.classList.contains('is-visible')) {
         return;
@@ -133,7 +117,6 @@ const useScrollReveal = () => {
       const fallbackIndex = fallbackIndices.get(element) ?? 0;
       assignTimingProperties(element, fallbackIndex);
       element.classList.add('is-visible');
-      updateDeckState(element, true);
       if (observer && !isResettable(element)) {
         observer.unobserve(element);
       }
@@ -145,8 +128,9 @@ const useScrollReveal = () => {
       }
 
       element.classList.remove('is-visible');
-      updateDeckState(element, false);
     };
+
+    const nonDeckElements = [];
 
     elements.forEach((element, index) => {
       fallbackIndices.set(element, index);
@@ -155,15 +139,66 @@ const useScrollReveal = () => {
         resettableElements.add(element);
       }
       const deck = getDeckForElement(element);
-      if (deck && !deckStates.has(deck)) {
-        deckStates.set(deck, 0);
-        deck.classList.remove('deck-is-expanded');
+      if (deck) {
+        deckCardElements.add(element);
+        if (!deckConfigs.has(deck)) {
+          deckConfigs.set(deck, {
+            cards: [],
+            expanded: false,
+          });
+          deck.classList.remove('deck-is-expanded');
+        }
+        const config = deckConfigs.get(deck);
+        config.cards.push(element);
+      } else {
+        nonDeckElements.push(element);
       }
     });
 
+    const updateDeckExpansion = (deck, shouldExpand) => {
+      const config = deckConfigs.get(deck);
+      if (!config || config.expanded === shouldExpand) {
+        return;
+      }
+
+      config.expanded = shouldExpand;
+      if (shouldExpand) {
+        deck.classList.add('deck-is-expanded');
+        config.cards.forEach((card) => {
+          revealElement(card);
+        });
+      } else {
+        deck.classList.remove('deck-is-expanded');
+        config.cards.forEach((card) => {
+          if (isResettable(card)) {
+            hideElement(card);
+          }
+        });
+      }
+    };
+
+    const evaluateDecks = (viewportHeight) => {
+      deckConfigs.forEach((config, deck) => {
+        const rect = deck.getBoundingClientRect();
+        const expandLine = viewportHeight * 0.55;
+        const collapseLowerBound = viewportHeight * 0.08;
+        const collapseUpperBound = viewportHeight * 0.92;
+
+        const shouldExpand = rect.top <= expandLine && rect.bottom >= collapseLowerBound;
+        const shouldCollapse = rect.bottom <= collapseLowerBound || rect.top >= collapseUpperBound;
+
+        if (shouldExpand) {
+          updateDeckExpansion(deck, true);
+        } else if (shouldCollapse) {
+          updateDeckExpansion(deck, false);
+        }
+      });
+    };
+
     const runManualCheck = () => {
       const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 0;
-      elements.forEach((element) => {
+      evaluateDecks(viewportHeight);
+      nonDeckElements.forEach((element) => {
         const resettable = isResettable(element);
         if (!resettable && element.classList.contains('is-visible')) {
           return;
@@ -198,7 +233,7 @@ const useScrollReveal = () => {
         },
       );
 
-      elements.forEach((element) => {
+      nonDeckElements.forEach((element) => {
         observer.observe(element);
       });
     }
