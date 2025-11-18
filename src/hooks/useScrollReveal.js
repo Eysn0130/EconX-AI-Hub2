@@ -60,6 +60,18 @@ const assignTimingProperties = (element, fallbackIndex) => {
   }
 };
 
+const shouldReveal = (element, viewportHeight) => {
+  if (!element) {
+    return false;
+  }
+
+  const rect = element.getBoundingClientRect();
+  const upperTriggerLine = viewportHeight * 0.88;
+  const lowerTriggerLine = viewportHeight * 0.05;
+
+  return rect.top <= upperTriggerLine && rect.bottom >= lowerTriggerLine;
+};
+
 const useScrollReveal = () => {
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -72,42 +84,95 @@ const useScrollReveal = () => {
       return undefined;
     }
 
+    const fallbackIndices = new Map();
+    let observer;
+
+    const revealElement = (element) => {
+      if (!element || element.classList.contains('is-visible')) {
+        return;
+      }
+
+      const fallbackIndex = fallbackIndices.get(element) ?? 0;
+      assignTimingProperties(element, fallbackIndex);
+      element.classList.add('is-visible');
+      if (observer) {
+        observer.unobserve(element);
+      }
+    };
+
     elements.forEach((element, index) => {
+      fallbackIndices.set(element, index);
       assignTimingProperties(element, index);
     });
 
-    if (!('IntersectionObserver' in window)) {
+    const runManualCheck = () => {
+      const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 0;
       elements.forEach((element) => {
-        element.classList.add('is-visible');
+        if (element.classList.contains('is-visible')) {
+          return;
+        }
+
+        if (shouldReveal(element, viewportHeight)) {
+          revealElement(element);
+        }
       });
-      return undefined;
+    };
+
+    runManualCheck();
+
+    if ('IntersectionObserver' in window) {
+      observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) {
+              return;
+            }
+
+            revealElement(entry.target);
+          });
+        },
+        {
+          threshold: 0.25,
+          rootMargin: '0px 0px -12% 0px',
+        },
+      );
+
+      elements.forEach((element) => {
+        observer.observe(element);
+      });
     }
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) {
-            return;
-          }
+    let ticking = false;
+    const scheduleManualCheck = () => {
+      if (ticking) {
+        return;
+      }
+      ticking = true;
+      window.requestAnimationFrame(() => {
+        runManualCheck();
+        ticking = false;
+      });
+    };
 
-          const { target } = entry;
-          assignTimingProperties(target, 0);
-          target.classList.add('is-visible');
-          observer.unobserve(target);
-        });
-      },
-      {
-        threshold: 0.25,
-        rootMargin: '0px 0px -12% 0px',
-      },
-    );
+    const scrollTargets = new Set([window]);
+    const mainContent = document.querySelector('.main-content');
+    if (mainContent) {
+      scrollTargets.add(mainContent);
+    }
 
-    elements.forEach((element) => {
-      observer.observe(element);
+    scrollTargets.forEach((target) => {
+      target.addEventListener('scroll', scheduleManualCheck, { passive: true });
     });
+    window.addEventListener('resize', scheduleManualCheck);
 
     return () => {
-      observer.disconnect();
+      if (observer) {
+        observer.disconnect();
+      }
+      scrollTargets.forEach((target) => {
+        target.removeEventListener('scroll', scheduleManualCheck);
+      });
+      window.removeEventListener('resize', scheduleManualCheck);
     };
   }, []);
 };
