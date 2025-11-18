@@ -12,17 +12,17 @@ const assignTimingProperties = (element, fallbackIndex) => {
     revealIndex,
     revealStep,
     revealMaxDelay,
+    revealTilt,
+    revealElevation,
   } = element.dataset;
 
   let delay = revealDelay;
+  const parsedIndex = revealIndex !== undefined ? Number(revealIndex) : Number.NaN;
 
-  if (!delay && revealIndex !== undefined) {
-    const parsedIndex = Number(revealIndex);
-    if (!Number.isNaN(parsedIndex)) {
-      const step = Number(revealStep ?? 80);
-      const maxDelay = Number(revealMaxDelay ?? 400);
-      delay = `${Math.min(parsedIndex * step, maxDelay)}ms`;
-    }
+  if (!delay && !Number.isNaN(parsedIndex)) {
+    const step = Number(revealStep ?? 80);
+    const maxDelay = Number(revealMaxDelay ?? 400);
+    delay = `${Math.min(parsedIndex * step, maxDelay)}ms`;
   }
 
   if (!delay) {
@@ -40,6 +40,46 @@ const assignTimingProperties = (element, fallbackIndex) => {
   if (revealEasing) {
     element.style.setProperty('--reveal-easing', revealEasing);
   }
+
+  const isWorkflowCard = element.classList.contains('workflow-card');
+
+  if (revealElevation && !element.style.getPropertyValue('--reveal-depth')) {
+    element.style.setProperty('--reveal-depth', revealElevation);
+  } else if (!element.style.getPropertyValue('--reveal-depth') && !isWorkflowCard) {
+    const baseDepth = 48 + fallbackIndex * 6;
+    element.style.setProperty('--reveal-depth', `${Math.min(baseDepth, 112)}px`);
+  }
+
+  if (revealTilt) {
+    element.style.setProperty('--reveal-tilt', revealTilt);
+  } else if (!Number.isNaN(parsedIndex) && !isWorkflowCard) {
+    const tiltDirection = parsedIndex % 2 === 0 ? -1 : 1;
+    element.style.setProperty('--reveal-tilt', `${tiltDirection * 7}deg`);
+  } else if (!element.style.getPropertyValue('--reveal-tilt')) {
+    element.style.setProperty('--reveal-tilt', '0deg');
+  }
+};
+
+const getVisibilityStatus = (element, viewportHeight) => {
+  if (!element || !viewportHeight) {
+    return 'idle';
+  }
+
+  const rect = element.getBoundingClientRect();
+  const revealUpperLine = viewportHeight * 0.68;
+  const revealLowerLine = viewportHeight * 0.18;
+  const hideUpperLine = viewportHeight * 0.08;
+  const hideLowerLine = viewportHeight * 1.08;
+
+  if (rect.top <= revealUpperLine && rect.bottom >= revealLowerLine) {
+    return 'show';
+  }
+
+  if (rect.bottom < hideUpperLine || rect.top > hideLowerLine) {
+    return 'hide';
+  }
+
+  return 'idle';
 };
 
 const useScrollReveal = () => {
@@ -54,42 +94,146 @@ const useScrollReveal = () => {
       return undefined;
     }
 
+    const fallbackIndices = new Map();
+    const resettableElements = new WeakSet();
+    const deckStates = new Map();
+    let observer;
+
+    const isResettable = (element) => resettableElements.has(element);
+
+    const getDeckForElement = (element) => {
+      if (!element) {
+        return undefined;
+      }
+      return element.closest('[data-reveal-deck]');
+    };
+
+    const updateDeckState = (element, isRevealed) => {
+      const deck = getDeckForElement(element);
+      if (!deck) {
+        return;
+      }
+
+      const current = deckStates.get(deck) ?? 0;
+      const next = Math.max(0, current + (isRevealed ? 1 : -1));
+      deckStates.set(deck, next);
+
+      if (next > 0) {
+        deck.classList.add('deck-is-expanded');
+      } else {
+        deck.classList.remove('deck-is-expanded');
+      }
+    };
+
+    const revealElement = (element) => {
+      if (!element || element.classList.contains('is-visible')) {
+        return;
+      }
+
+      const fallbackIndex = fallbackIndices.get(element) ?? 0;
+      assignTimingProperties(element, fallbackIndex);
+      element.classList.add('is-visible');
+      updateDeckState(element, true);
+      if (observer && !isResettable(element)) {
+        observer.unobserve(element);
+      }
+    };
+
+    const hideElement = (element) => {
+      if (!element || !element.classList.contains('is-visible')) {
+        return;
+      }
+
+      element.classList.remove('is-visible');
+      updateDeckState(element, false);
+    };
+
     elements.forEach((element, index) => {
+      fallbackIndices.set(element, index);
       assignTimingProperties(element, index);
+      if (element.dataset.revealReset === 'true') {
+        resettableElements.add(element);
+      }
+      const deck = getDeckForElement(element);
+      if (deck && !deckStates.has(deck)) {
+        deckStates.set(deck, 0);
+        deck.classList.remove('deck-is-expanded');
+      }
     });
 
-    if (!('IntersectionObserver' in window)) {
+    const runManualCheck = () => {
+      const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 0;
       elements.forEach((element) => {
-        element.classList.add('is-visible');
+        const resettable = isResettable(element);
+        if (!resettable && element.classList.contains('is-visible')) {
+          return;
+        }
+
+        const visibilityStatus = getVisibilityStatus(element, viewportHeight);
+
+        if (visibilityStatus === 'show') {
+          revealElement(element);
+        } else if (resettable && visibilityStatus === 'hide') {
+          hideElement(element);
+        }
       });
-      return undefined;
+    };
+
+    runManualCheck();
+
+    if ('IntersectionObserver' in window) {
+      observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              revealElement(entry.target);
+            } else if (isResettable(entry.target)) {
+              hideElement(entry.target);
+            }
+          });
+        },
+        {
+          threshold: 0.25,
+          rootMargin: '0px 0px -12% 0px',
+        },
+      );
+
+      elements.forEach((element) => {
+        observer.observe(element);
+      });
     }
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) {
-            return;
-          }
+    let ticking = false;
+    const scheduleManualCheck = () => {
+      if (ticking) {
+        return;
+      }
+      ticking = true;
+      window.requestAnimationFrame(() => {
+        runManualCheck();
+        ticking = false;
+      });
+    };
 
-          const { target } = entry;
-          assignTimingProperties(target, 0);
-          target.classList.add('is-visible');
-          observer.unobserve(target);
-        });
-      },
-      {
-        threshold: 0.25,
-        rootMargin: '0px 0px -12% 0px',
-      },
-    );
+    const scrollTargets = new Set([window]);
+    const mainContent = document.querySelector('.main-content');
+    if (mainContent) {
+      scrollTargets.add(mainContent);
+    }
 
-    elements.forEach((element) => {
-      observer.observe(element);
+    scrollTargets.forEach((target) => {
+      target.addEventListener('scroll', scheduleManualCheck, { passive: true });
     });
+    window.addEventListener('resize', scheduleManualCheck);
 
     return () => {
-      observer.disconnect();
+      if (observer) {
+        observer.disconnect();
+      }
+      scrollTargets.forEach((target) => {
+        target.removeEventListener('scroll', scheduleManualCheck);
+      });
+      window.removeEventListener('resize', scheduleManualCheck);
     };
   }, []);
 };
