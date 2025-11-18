@@ -79,6 +79,7 @@ const HomePage = () => {
       </div>
 
       {sections.map((section) => {
+        const isCaseDeck = section.title === '案件侦办模块';
         const cards = moduleCards.filter((card) => section.ids.includes(card.id));
         if (cards.length === 0) {
           return null;
@@ -99,16 +100,20 @@ const HomePage = () => {
             >
               {section.title}
             </h2>
-            <div className="workflow-cards" data-reveal-group={section.title}>
+            <div
+              className="workflow-cards"
+              data-reveal-group={section.title}
+              data-reveal-deck={isCaseDeck ? 'case' : undefined}
+            >
               {cards.map((card, index) => (
                 <div
                   key={card.id}
                   className="workflow-card reveal-on-scroll"
                   data-reveal-duration="760ms"
-                  data-reveal-type={index % 2 === 0 ? 'slide-right' : 'slide-left'}
                   data-reveal-index={index}
                   data-reveal-step="90"
                   data-reveal-max-delay="450"
+                  data-reveal-reset={isCaseDeck ? 'true' : undefined}
                   onClick={() => handleCardClick(card)}
                   role="button"
                   tabIndex={0}
