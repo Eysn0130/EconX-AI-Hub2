@@ -178,13 +178,16 @@ const useScrollReveal = () => {
     };
 
     const evaluateDecks = (viewportHeight) => {
+      const hasUserScrolled = window.scrollY > 35;
+
       deckConfigs.forEach((config, deck) => {
         const rect = deck.getBoundingClientRect();
-        const expandLine = viewportHeight * 0.38;
-        const collapseLowerBound = viewportHeight * 0.08;
-        const collapseUpperBound = viewportHeight * 0.92;
+        const expandLine = viewportHeight * 0.52;
+        const collapseLowerBound = viewportHeight * 0.12;
+        const collapseUpperBound = viewportHeight * 0.96;
 
-        const shouldExpand = rect.top <= expandLine && rect.bottom >= collapseLowerBound;
+        const shouldExpand =
+          hasUserScrolled && rect.top <= expandLine && rect.bottom >= collapseLowerBound;
         const shouldCollapse = rect.bottom <= collapseLowerBound || rect.top >= collapseUpperBound;
 
         if (shouldExpand) {
