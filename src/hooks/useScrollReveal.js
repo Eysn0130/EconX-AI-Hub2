@@ -180,7 +180,7 @@ const useScrollReveal = () => {
     const evaluateDecks = (viewportHeight) => {
       deckConfigs.forEach((config, deck) => {
         const rect = deck.getBoundingClientRect();
-        const expandLine = viewportHeight * 0.55;
+        const expandLine = viewportHeight * 0.38;
         const collapseLowerBound = viewportHeight * 0.08;
         const collapseUpperBound = viewportHeight * 0.92;
 
