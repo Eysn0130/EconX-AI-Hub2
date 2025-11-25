@@ -697,8 +697,10 @@
 }
 
 .workflow-cards[data-reveal-deck='case'] {
-  --case-deck-fold-height: clamp(220px, 24vw, 300px);
-  --case-card-width: min(360px, calc(100% - 3rem));
+  --case-deck-fold-height: clamp(140px, 18vw, 190px);
+  --case-card-width: min(340px, calc(100% - 3rem));
+  --case-fan-radius: clamp(130px, 20vw, 190px);
+  --case-fan-tilt: 18deg;
   min-height: clamp(360px, 38vw, 420px);
   padding: clamp(0.25rem, 1vw, 0.75rem) clamp(0.5rem, 1.5vw, 1.25rem) clamp(1rem, 2vw, 1.5rem);
   overflow: visible;
@@ -710,14 +712,15 @@
 .workflow-cards[data-reveal-deck='case']:not(.deck-is-expanded) {
   max-height: var(--case-deck-fold-height);
   overflow: hidden;
-  padding-bottom: clamp(3rem, 7vw, 5rem);
+  padding-bottom: clamp(3.8rem, 10vw, 6.2rem);
+  transform: translateZ(0);
 }
 
 .workflow-cards[data-reveal-deck='case']::after {
   content: '';
   position: absolute;
   inset: auto 0 0 0;
-  height: clamp(60px, 12vw, 110px);
+  height: clamp(68px, 14vw, 120px);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(13, 28, 56, 0.25) 65%, rgba(13, 28, 56, 0.4) 100%);
   pointer-events: none;
   opacity: 0;
@@ -733,19 +736,20 @@
 .workflow-cards[data-reveal-deck='case'] .workflow-card.reveal-on-scroll {
   --reveal-rotate-z: 0deg;
   will-change: transform, opacity;
+  transition: transform 0.95s cubic-bezier(0.2, 0.7, 0.15, 1),
+    filter 0.6s ease, opacity 0.4s ease;
 }
 
 .workflow-cards[data-reveal-deck='case'] .workflow-card.reveal-on-scroll:not(.is-visible) {
-  --reveal-scale: 0.72;
-  --reveal-rotate: 56deg;
+  --reveal-scale: 0.7;
+  --reveal-rotate: 60deg;
   --reveal-translate-z: -260px;
   --reveal-perspective: 1400px;
-  --reveal-depth: 180px;
+  --reveal-depth: 220px;
   --reveal-translate-x: 0px;
-  --reveal-tilt: 0deg;
-  transform-origin: center 150%;
+  --reveal-tilt: var(--case-fan-tilt);
+  transform-origin: center calc(100% + var(--case-fan-radius));
   box-shadow: 0 34px 84px rgba(9, 32, 68, 0.24);
-  transition: none;
   position: absolute;
   top: 0;
   left: 50%;
@@ -753,6 +757,7 @@
   margin-left: calc(var(--case-card-width) / -2);
   opacity: 1;
   pointer-events: none;
+  filter: blur(2px) saturate(0.9);
 }
 
 .workflow-cards[data-reveal-deck='case'] .workflow-card.reveal-on-scroll.is-visible {
