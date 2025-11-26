@@ -414,7 +414,7 @@ const StatsPage = () => {
     <div className="stats-page">
       <header className="stats-header-bar">
         <div className="stats-header-info">
-          <i className="fa-solid fa-chart-pie stats-header-icon" />
+          <i className="glass-icon glass-icon--sm fa-solid fa-chart-pie stats-header-icon" />
           <div className="stats-title-text">
             <span className="stats-title-main">系统使用统计</span>
             <span className="stats-title-sub">System Usage Analytics</span>
@@ -432,7 +432,7 @@ const StatsPage = () => {
             }
           }}
         >
-          <i className="fa-solid fa-house" />
+          <i className="glass-icon glass-icon--xs fa-solid fa-house" />
         </a>
       </header>
 
@@ -479,35 +479,35 @@ const StatsPage = () => {
         <section className="stats-summary">
           <div className="stats-summary-card">
             <div className="stats-summary-icon">
-              <i className="fa-solid fa-chart-column" />
+              <i className="glass-icon glass-icon--sm glass-icon--floating fa-solid fa-chart-column" />
             </div>
             <div className="stats-summary-value">{formatNumber(summaryStats.totalVisits)}</div>
             <div className="stats-summary-label">累计访问次数</div>
           </div>
           <div className="stats-summary-card">
             <div className="stats-summary-icon">
-              <i className="fa-solid fa-clock-rotate-left" />
+              <i className="glass-icon glass-icon--sm glass-icon--floating fa-solid fa-clock-rotate-left" />
             </div>
             <div className="stats-summary-value">{summaryStats.avgDuration.toFixed(1)}m</div>
             <div className="stats-summary-label">平均使用时长</div>
           </div>
           <div className="stats-summary-card">
             <div className="stats-summary-icon">
-              <i className="fa-solid fa-signal" />
+              <i className="glass-icon glass-icon--sm glass-icon--floating fa-solid fa-signal" />
             </div>
             <div className="stats-summary-value">{formatPercent(summaryStats.activeRate)}</div>
             <div className="stats-summary-label">模块活跃率</div>
           </div>
           <div className="stats-summary-card">
             <div className="stats-summary-icon">
-              <i className="fa-solid fa-face-smile" />
+              <i className="glass-icon glass-icon--sm glass-icon--floating fa-solid fa-face-smile" />
             </div>
             <div className="stats-summary-value">{summaryStats.avgSatisfaction.toFixed(2)}</div>
             <div className="stats-summary-label">满意度评率</div>
           </div>
           <div className="stats-summary-card">
             <div className="stats-summary-icon">
-              <i className="fa-solid fa-building-user" />
+              <i className="glass-icon glass-icon--sm glass-icon--floating fa-solid fa-building-user" />
             </div>
             <div className="stats-summary-value">{activeUnits}</div>
             <div className="stats-summary-label">活跃单位数</div>
@@ -518,7 +518,7 @@ const StatsPage = () => {
           <article className="stats-card">
             <div className="stats-card-header">
               <span>模块访问分布</span>
-              <i className="fa-solid fa-chart-bar" />
+              <i className="glass-icon glass-icon--xs fa-solid fa-chart-bar" />
             </div>
             <div className="stats-card-body">
               <HorizontalBars data={filteredModules.slice(0, 8)} />
@@ -528,7 +528,7 @@ const StatsPage = () => {
           <article className="stats-card">
             <div className="stats-card-header">
               <span>访问趋势与满意度</span>
-              <i className="fa-solid fa-chart-line" />
+              <i className="glass-icon glass-icon--xs fa-solid fa-chart-line" />
             </div>
             <div className="stats-card-body stats-card-body--chart">
               <LineChart data={trendSeries} durationSeries={satisfactionSeries} />
@@ -543,7 +543,7 @@ const StatsPage = () => {
           <article className="stats-card stats-card--table">
             <div className="stats-card-header">
               <span>模块使用明细</span>
-              <i className="fa-solid fa-layer-group" />
+              <i className="glass-icon glass-icon--xs fa-solid fa-layer-group" />
             </div>
             <div className="stats-card-body">
               <table className="stats-table" aria-label="模块使用明细">
@@ -574,7 +574,7 @@ const StatsPage = () => {
           <article className="stats-card">
             <div className="stats-card-header">
               <span>用时分布</span>
-              <i className="fa-solid fa-clock" />
+              <i className="glass-icon glass-icon--xs fa-solid fa-clock" />
             </div>
             <div className="stats-card-body">
               <HourlyUsage data={moduleUsageByHour} />
@@ -584,7 +584,7 @@ const StatsPage = () => {
           <article className="stats-card">
             <div className="stats-card-header">
               <span>用户评率分布</span>
-              <i className="fa-solid fa-star-half-stroke" />
+              <i className="glass-icon glass-icon--xs fa-solid fa-star-half-stroke" />
             </div>
             <div className="stats-card-body">
               <RatingDistribution data={ratingDistribution} />
@@ -594,7 +594,7 @@ const StatsPage = () => {
           <article className="stats-card stats-card--table">
             <div className="stats-card-header">
               <span>单位登录活跃度</span>
-              <i className="fa-solid fa-building-user" />
+              <i className="glass-icon glass-icon--xs fa-solid fa-building-user" />
             </div>
             <div className="stats-card-body">
               <table className="stats-table" aria-label="单位登录活跃度">

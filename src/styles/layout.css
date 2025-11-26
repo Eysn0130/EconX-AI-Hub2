@@ -218,15 +218,17 @@
 }
 
 .header-link__icon {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(102, 174, 255, 0.18);
-  border: 1px solid rgba(162, 215, 255, 0.4);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  width: auto;
+  height: auto;
+}
+
+.header-link__icon .glass-icon {
+  width: 34px;
+  height: 34px;
+  color: #0f2a5f;
 }
 
 .header-link__label {
@@ -516,11 +518,16 @@
 }
 
 .nav-link i {
-  margin-right: 0.75rem;
-  width: 20px;
-  text-align: center;
-  color: var(--police-blue);
   transition: transform 0.3s, color 0.3s;
+}
+
+.nav-link .glass-icon {
+  margin-right: 0.9rem;
+  width: 42px;
+  height: 42px;
+  font-size: 1.05rem;
+  flex-shrink: 0;
+  color: #0f2a5f;
 }
 
 .nav-icon-pulse {
@@ -583,7 +590,7 @@
 }
 
 .nav-link:hover i {
-  transform: scale(1.2);
+  transform: scale(1.08);
   color: var(--police-accent);
 }
 
@@ -969,10 +976,14 @@
 }
 
 .card-icon {
-  font-size: 2.8rem;
-  color: var(--police-blue);
-  margin-bottom: 0.5rem;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.75rem;
+}
+
+.card-icon .glass-icon {
+  color: #0e2f69;
 }
 
 .card-title {

@@ -74,7 +74,7 @@ const SideNavLayout = ({ icon, title, subtitle, iframeSrc, iframeAllow = 'microp
     <div className="side-layout-root">
       <header className="side-layout-header">
         <div className="side-layout-logo">
-          <i className={icon} />
+          <i className={`glass-icon glass-icon--lg ${icon}`} />
           <div>
             <div className="side-layout-title">{title}</div>
             <div className="side-layout-subtitle">{subtitle}</div>
@@ -85,7 +85,7 @@ const SideNavLayout = ({ icon, title, subtitle, iframeSrc, iframeAllow = 'microp
           className="side-layout-back"
           onClick={() => navigate(withPoliceId('/', policeId))}
         >
-          <i className="fa-solid fa-house" /> 返回主页
+          <i className="glass-icon glass-icon--xs fa-solid fa-house" /> 返回主页
         </button>
       </header>
       <div className="side-layout-body">
@@ -102,7 +102,7 @@ const SideNavLayout = ({ icon, title, subtitle, iframeSrc, iframeAllow = 'microp
               }
             }}
           >
-            <i className={`fa-solid ${sidebarVisible ? 'fa-chevron-left' : 'fa-chevron-right'}`} />
+            <i className={`glass-icon glass-icon--xs fa-solid ${sidebarVisible ? 'fa-chevron-left' : 'fa-chevron-right'}`} />
           </div>
           {navSections.map((section) => (
             <div key={section.title}>
@@ -120,7 +120,7 @@ const SideNavLayout = ({ icon, title, subtitle, iframeSrc, iframeAllow = 'microp
                         navigateTo(item.path, item.moduleId);
                       }}
                     >
-                      <i className={item.icon} />
+                      <i className={`glass-icon glass-icon--sm ${item.icon}`} />
                       {item.label}
                     </a>
                   </li>

@@ -27,7 +27,7 @@ const LoginPage = () => {
         <div className="login-header">
           <div className="login-branding">
             <div className="login-logo">
-              <i className="fa-solid fa-shield-halved" />
+              <i className="glass-icon glass-icon--xl glass-icon--accent fa-solid fa-shield-halved" />
             </div>
             <div className="login-title-container">
               <div className="login-title-main">经智AI</div>
@@ -40,7 +40,7 @@ const LoginPage = () => {
           <button type="submit" className="login-button" disabled={loading}>
             {loading ? (
               <>
-                <i className="fa-solid fa-circle-notch fa-spin" /> 登录中...
+                <i className="glass-icon glass-icon--xs fa-solid fa-circle-notch fa-spin" /> 登录中...
               </>
             ) : (
               '登 录'
@@ -56,7 +56,7 @@ const LoginPage = () => {
                 navigate(withPoliceId('/chrome-installer', policeId));
               }}
             >
-              <i className="fa-brands fa-chrome" /> 安装Chrome浏览器
+              <i className="glass-icon glass-icon--xs fa-brands fa-chrome" /> 安装Chrome浏览器
             </a>
           </div>
         </form>

@@ -27,7 +27,7 @@ const Sidebar = ({ visible, onToggle, onNavigate, buildLink }) => {
         role="button"
         tabIndex={0}
       >
-        <i className={`fa-solid ${visible ? 'fa-chevron-left' : 'fa-chevron-right'}`} />
+        <i className={`glass-icon glass-icon--xs fa-solid ${visible ? 'fa-chevron-left' : 'fa-chevron-right'}`} />
       </div>
       {navSections.map((section) => (
         <div className="nav-section" key={section.title}>
@@ -45,7 +45,7 @@ const Sidebar = ({ visible, onToggle, onNavigate, buildLink }) => {
                     }
                   }}
                 >
-                  <i className={item.icon} />
+                  <i className={`glass-icon glass-icon--sm ${item.icon}`} />
                   <div className="nav-icon-pulse" />
                   {item.label}
                   <span className="nav-tooltip">{item.label}</span>

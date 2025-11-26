@@ -48,7 +48,7 @@ const Header = ({ policeId, onNavigate, buildLink }) => {
           <div className="brand-emblem">
             <span className="brand-ring brand-ring--outer" />
             <span className="brand-ring brand-ring--inner" />
-            <i className="fa-solid fa-shield-halved logo-icon" />
+            <i className="glass-icon glass-icon--lg glass-icon--accent fa-solid fa-shield-halved logo-icon" />
           </div>
           <div className="brand-copy">
             <div className="title-text">经智AI智能体工作平台</div>
@@ -74,7 +74,7 @@ const Header = ({ policeId, onNavigate, buildLink }) => {
               title="访问统计"
             >
               <span className="header-link__icon">
-                <i className="fa-solid fa-chart-column" />
+                <i className="glass-icon glass-icon--xs fa-solid fa-chart-column" />
               </span>
               <span className="header-link__label">访问统计</span>
             </Link>
@@ -85,13 +85,13 @@ const Header = ({ policeId, onNavigate, buildLink }) => {
               title="安装浏览器插件"
             >
               <span className="header-link__icon">
-                <i className="fa-brands fa-chrome" />
+                <i className="glass-icon glass-icon--xs fa-brands fa-chrome" />
               </span>
               <span className="header-link__label">浏览器插件</span>
             </Link>
           </nav>
           <div className="theme-toggle" onClick={toggle} title="切换主题" role="button" tabIndex={0}>
-            <i className={`fa-solid ${isDark ? 'fa-sun' : 'fa-moon'}`} />
+            <i className={`glass-icon glass-icon--xs fa-solid ${isDark ? 'fa-sun' : 'fa-moon'}`} />
           </div>
           <div className="user-info" ref={menuRef}>
             <span
@@ -102,19 +102,19 @@ const Header = ({ policeId, onNavigate, buildLink }) => {
               }}
               ref={toggleRef}
             >
-              <i className="fa-solid fa-user-shield" />
+              <i className="glass-icon glass-icon--xs fa-solid fa-user-shield" />
               <span>{displayId}</span>
-              <i className="fa-solid fa-caret-down" />
+              <i className="glass-icon glass-icon--xs fa-solid fa-caret-down" />
             </span>
             <div className={`user-menu ${menuOpen ? 'active' : ''}`}>
               <a className="menu-item" href="#">
-                <i className="fa-solid fa-user-gear" /> 个人设置
+                <i className="glass-icon glass-icon--xs fa-solid fa-user-gear" /> 个人设置
               </a>
               <a className="menu-item" href="#">
-                <i className="fa-solid fa-bell" /> 消息通知
+                <i className="glass-icon glass-icon--xs fa-solid fa-bell" /> 消息通知
               </a>
               <Link to={buildLink('/login')} className="logout-btn" onClick={() => handleNavigate('/login')}>
-                <i className="fa-solid fa-right-from-bracket" /> 退出系统
+                <i className="glass-icon glass-icon--xs fa-solid fa-right-from-bracket" /> 退出系统
               </Link>
             </div>
           </div>

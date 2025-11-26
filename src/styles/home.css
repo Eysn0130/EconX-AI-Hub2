@@ -41,24 +41,28 @@
 
 .stat-icon {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
-  font-size: 1.2rem;
-  opacity: 0.5;
-  color: var(--police-blue);
+  top: 0.7rem;
+  right: 0.7rem;
   transition: all 0.3s;
 }
 
-.stat-card:nth-child(1) .stat-icon {
-  color: #3498db;
+.stat-icon .glass-icon {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(210, 228, 255, 0.78));
+  color: #0d2a55;
 }
 
-.stat-card:nth-child(2) .stat-icon {
-  color: #4a6fa5;
+.stat-card:nth-child(1) .stat-icon .glass-icon {
+  background: linear-gradient(145deg, rgba(53, 152, 219, 0.95), rgba(152, 214, 255, 0.88));
+  color: #0b3054;
 }
 
-.stat-card:nth-child(3) .stat-icon {
-  color: #e74c3c;
+.stat-card:nth-child(2) .stat-icon .glass-icon {
+  background: linear-gradient(145deg, rgba(74, 111, 165, 0.95), rgba(142, 176, 235, 0.85));
+}
+
+.stat-card:nth-child(3) .stat-icon .glass-icon {
+  background: linear-gradient(145deg, rgba(231, 76, 60, 0.95), rgba(255, 167, 158, 0.85));
+  color: #5f1111;
 }
 
 .stat-card:hover {
