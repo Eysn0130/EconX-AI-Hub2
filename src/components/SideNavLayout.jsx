@@ -125,7 +125,13 @@ const SideNavLayout = ({ icon, title, subtitle, iframeSrc, iframeAllow = 'microp
                         navigateTo(item.path, item.moduleId);
                       }}
                     >
-                      <GlassIcon icon={item.icon} size="sm" tone={item.tone || 'cool'} floating={activeModule.startsWith(item.moduleId)} />
+                    <GlassIcon
+                      icon={item.icon}
+                      size="sm"
+                      tone={item.tone || 'cool'}
+                      floating={activeModule.startsWith(item.moduleId)}
+                      label={item.label}
+                    />
                       {item.label}
                     </a>
                   </li>

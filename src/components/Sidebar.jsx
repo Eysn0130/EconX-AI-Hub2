@@ -46,7 +46,13 @@ const Sidebar = ({ visible, onToggle, onNavigate, buildLink }) => {
                     }
                   }}
                 >
-                  <GlassIcon icon={item.icon} size="sm" tone={item.tone || 'cool'} floating={isActive(item.path)} />
+                  <GlassIcon
+                    icon={item.icon}
+                    size="sm"
+                    tone={item.tone || 'cool'}
+                    floating={isActive(item.path)}
+                    label={item.label}
+                  />
                   <div className="nav-icon-pulse" />
                   {item.label}
                   <span className="nav-tooltip">{item.label}</span>
