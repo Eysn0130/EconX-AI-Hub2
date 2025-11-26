@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { navSections } from '../data/navigation.js';
 import '../styles/layout.css';
+import GlassIcon from './GlassIcon.jsx';
 
 const Sidebar = ({ visible, onToggle, onNavigate, buildLink }) => {
   const location = useLocation();
@@ -27,7 +28,7 @@ const Sidebar = ({ visible, onToggle, onNavigate, buildLink }) => {
         role="button"
         tabIndex={0}
       >
-        <i className={`glass-icon glass-icon--xs fa-solid ${visible ? 'fa-chevron-left' : 'fa-chevron-right'}`} />
+        <GlassIcon icon={`fa-solid ${visible ? 'fa-chevron-left' : 'fa-chevron-right'}`} size="xs" tone="cool" />
       </div>
       {navSections.map((section) => (
         <div className="nav-section" key={section.title}>
@@ -45,7 +46,7 @@ const Sidebar = ({ visible, onToggle, onNavigate, buildLink }) => {
                     }
                   }}
                 >
-                  <i className={`glass-icon glass-icon--sm ${item.icon}`} />
+                  <GlassIcon icon={item.icon} size="sm" tone={item.tone || 'cool'} floating={isActive(item.path)} />
                   <div className="nav-icon-pulse" />
                   {item.label}
                   <span className="nav-tooltip">{item.label}</span>

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import '../styles/login.css';
 import { usePoliceId } from '../hooks/usePoliceId.js';
 import { withPoliceId } from '../utils/navigation.js';
+import GlassIcon from '../components/GlassIcon.jsx';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ const LoginPage = () => {
         <div className="login-header">
           <div className="login-branding">
             <div className="login-logo">
-              <i className="glass-icon glass-icon--xl glass-icon--accent fa-solid fa-shield-halved" />
+              <GlassIcon icon="fa-solid fa-shield-halved" size="xl" tone="navy" floating />
             </div>
             <div className="login-title-container">
               <div className="login-title-main">经智AI</div>
@@ -40,7 +41,7 @@ const LoginPage = () => {
           <button type="submit" className="login-button" disabled={loading}>
             {loading ? (
               <>
-                <i className="glass-icon glass-icon--xs fa-solid fa-circle-notch fa-spin" /> 登录中...
+                <GlassIcon icon="fa-solid fa-circle-notch" size="xs" tone="mint" pulsing /> 登录中...
               </>
             ) : (
               '登 录'
@@ -56,7 +57,7 @@ const LoginPage = () => {
                 navigate(withPoliceId('/chrome-installer', policeId));
               }}
             >
-              <i className="glass-icon glass-icon--xs fa-brands fa-chrome" /> 安装Chrome浏览器
+              <GlassIcon icon="fa-brands fa-chrome" size="xs" tone="mint" floating /> 安装Chrome浏览器
             </a>
           </div>
         </form>
