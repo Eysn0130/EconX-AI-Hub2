@@ -68,7 +68,7 @@ const HomePage = () => {
               data-reveal-max-delay="320"
             >
               <div className="stat-icon">
-                <i className={stat.icon} />
+                <i className={`glass-icon glass-icon--lg glass-icon--floating ${stat.icon}`} />
               </div>
               <div className="stat-value">{stat.value}</div>
               <div className="stat-label">{stat.label}</div>
@@ -130,14 +130,14 @@ const HomePage = () => {
                   </div>
                   <div className="card-body">
                     <div className="card-icon">
-                      <i className={card.icon} />
+                      <i className={`glass-icon glass-icon--xl glass-icon--floating ${card.icon}`} />
                     </div>
                     <div className="card-title">{card.cardTitle}</div>
                     <div className="card-desc">{card.description}</div>
                   </div>
                   <div className="card-footer">
                     <span>
-                      <i className={card.footerIcon} /> {card.footerLabel}
+                      <i className={`glass-icon glass-icon--xs ${card.footerIcon}`} /> {card.footerLabel}
                     </span>
                     <span className="badge">{card.badge}</span>
                   </div>

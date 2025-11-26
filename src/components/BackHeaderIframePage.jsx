@@ -67,7 +67,7 @@ const BackHeaderIframePage = ({
     <div className="back-iframe-root">
       <header className="back-iframe-header">
         <div className="back-iframe-logo">
-          <i className={icon} />
+          <i className={`glass-icon glass-icon--lg ${icon}`} />
           <div>
             <div className="back-iframe-title">{title}</div>
             <div className="back-iframe-subtitle">{subtitle}</div>
@@ -78,7 +78,7 @@ const BackHeaderIframePage = ({
           className="back-iframe-button"
           onClick={() => navigate(withPoliceId('/', policeId))}
         >
-          <i className="fa-solid fa-house" />
+          <i className="glass-icon glass-icon--xs fa-solid fa-house" />
           <span>返回主页</span>
         </button>
       </header>
