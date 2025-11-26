@@ -4,6 +4,7 @@ import { NavigationContext } from '../context/NavigationContext.js';
 import useScrollReveal from '../hooks/useScrollReveal.js';
 import '../styles/layout.css';
 import '../styles/home.css';
+import GlassIcon from '../components/GlassIcon.jsx';
 
 const sections = [
   { title: '通用AI模块', ids: ['general-ai'] },
@@ -68,7 +69,7 @@ const HomePage = () => {
               data-reveal-max-delay="320"
             >
               <div className="stat-icon">
-                <i className={stat.icon} />
+                <GlassIcon icon={stat.icon} size="lg" tone="mint" floating />
               </div>
               <div className="stat-value">{stat.value}</div>
               <div className="stat-label">{stat.label}</div>
@@ -130,14 +131,14 @@ const HomePage = () => {
                   </div>
                   <div className="card-body">
                     <div className="card-icon">
-                      <i className={card.icon} />
+                      <GlassIcon icon={card.icon} size="xl" tone={card.tone || 'cool'} floating />
                     </div>
                     <div className="card-title">{card.cardTitle}</div>
                     <div className="card-desc">{card.description}</div>
                   </div>
                   <div className="card-footer">
                     <span>
-                      <i className={card.footerIcon} /> {card.footerLabel}
+                      <GlassIcon icon={card.footerIcon} size="xs" tone={card.tone || 'cool'} /> {card.footerLabel}
                     </span>
                     <span className="badge">{card.badge}</span>
                   </div>

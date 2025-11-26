@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useDarkMode } from '../hooks/useDarkMode.js';
 import '../styles/layout.css';
+import GlassIcon from './GlassIcon.jsx';
 
 const Header = ({ policeId, onNavigate, buildLink }) => {
   const { isDark, toggle } = useDarkMode();
@@ -48,7 +49,7 @@ const Header = ({ policeId, onNavigate, buildLink }) => {
           <div className="brand-emblem">
             <span className="brand-ring brand-ring--outer" />
             <span className="brand-ring brand-ring--inner" />
-            <i className="fa-solid fa-shield-halved logo-icon" />
+            <GlassIcon icon="fa-solid fa-shield-halved" size="lg" tone="navy" floating className="logo-icon" />
           </div>
           <div className="brand-copy">
             <div className="title-text">经智AI智能体工作平台</div>
@@ -74,7 +75,7 @@ const Header = ({ policeId, onNavigate, buildLink }) => {
               title="访问统计"
             >
               <span className="header-link__icon">
-                <i className="fa-solid fa-chart-column" />
+                <GlassIcon icon="fa-solid fa-chart-simple" size="xs" tone="cool" />
               </span>
               <span className="header-link__label">访问统计</span>
             </Link>
@@ -85,13 +86,13 @@ const Header = ({ policeId, onNavigate, buildLink }) => {
               title="安装浏览器插件"
             >
               <span className="header-link__icon">
-                <i className="fa-brands fa-chrome" />
+                <GlassIcon icon="fa-brands fa-chrome" size="xs" tone="mint" />
               </span>
               <span className="header-link__label">浏览器插件</span>
             </Link>
           </nav>
           <div className="theme-toggle" onClick={toggle} title="切换主题" role="button" tabIndex={0}>
-            <i className={`fa-solid ${isDark ? 'fa-sun' : 'fa-moon'}`} />
+            <GlassIcon icon={`fa-solid ${isDark ? 'fa-sun' : 'fa-moon'}`} size="xs" tone="amber" />
           </div>
           <div className="user-info" ref={menuRef}>
             <span
@@ -102,19 +103,19 @@ const Header = ({ policeId, onNavigate, buildLink }) => {
               }}
               ref={toggleRef}
             >
-              <i className="fa-solid fa-user-shield" />
+              <GlassIcon icon="fa-solid fa-user-shield" size="xs" tone="navy" />
               <span>{displayId}</span>
-              <i className="fa-solid fa-caret-down" />
+              <GlassIcon icon="fa-solid fa-chevron-down" size="xs" tone="cool" />
             </span>
             <div className={`user-menu ${menuOpen ? 'active' : ''}`}>
               <a className="menu-item" href="#">
-                <i className="fa-solid fa-user-gear" /> 个人设置
+                <GlassIcon icon="fa-solid fa-user-gear" size="xs" tone="mint" /> 个人设置
               </a>
               <a className="menu-item" href="#">
-                <i className="fa-solid fa-bell" /> 消息通知
+                <GlassIcon icon="fa-solid fa-bell" size="xs" tone="amber" pulsing /> 消息通知
               </a>
               <Link to={buildLink('/login')} className="logout-btn" onClick={() => handleNavigate('/login')}>
-                <i className="fa-solid fa-right-from-bracket" /> 退出系统
+                <GlassIcon icon="fa-solid fa-arrow-right-from-bracket" size="xs" tone="rose" /> 退出系统
               </Link>
             </div>
           </div>

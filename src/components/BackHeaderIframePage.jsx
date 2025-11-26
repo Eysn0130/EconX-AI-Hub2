@@ -9,6 +9,7 @@ import {
 } from '../hooks/useModuleTracking.js';
 import { recordLoginEvent } from '../hooks/useLoginTracking.js';
 import '../styles/backHeaderIframe.css';
+import GlassIcon from './GlassIcon.jsx';
 
 const BackHeaderIframePage = ({
   title,
@@ -67,7 +68,7 @@ const BackHeaderIframePage = ({
     <div className="back-iframe-root">
       <header className="back-iframe-header">
         <div className="back-iframe-logo">
-          <i className={icon} />
+          <GlassIcon icon={icon} size="lg" tone="cool" floating />
           <div>
             <div className="back-iframe-title">{title}</div>
             <div className="back-iframe-subtitle">{subtitle}</div>
@@ -78,7 +79,7 @@ const BackHeaderIframePage = ({
           className="back-iframe-button"
           onClick={() => navigate(withPoliceId('/', policeId))}
         >
-          <i className="fa-solid fa-house" />
+          <GlassIcon icon="fa-solid fa-house" size="xs" tone="mint" />
           <span>返回主页</span>
         </button>
       </header>

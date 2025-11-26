@@ -10,6 +10,7 @@ import { usePoliceId } from '../hooks/usePoliceId.js';
 import { withPoliceId } from '../utils/navigation.js';
 import { recordLoginEvent } from '../hooks/useLoginTracking.js';
 import '../styles/sideNavLayout.css';
+import GlassIcon from './GlassIcon.jsx';
 
 const SideNavLayout = ({ icon, title, subtitle, iframeSrc, iframeAllow = 'microphone', moduleId }) => {
   const [sidebarVisible, setSidebarVisible] = useState(false);
@@ -74,7 +75,7 @@ const SideNavLayout = ({ icon, title, subtitle, iframeSrc, iframeAllow = 'microp
     <div className="side-layout-root">
       <header className="side-layout-header">
         <div className="side-layout-logo">
-          <i className={icon} />
+          <GlassIcon icon={icon} size="lg" tone="cool" floating />
           <div>
             <div className="side-layout-title">{title}</div>
             <div className="side-layout-subtitle">{subtitle}</div>
@@ -85,7 +86,7 @@ const SideNavLayout = ({ icon, title, subtitle, iframeSrc, iframeAllow = 'microp
           className="side-layout-back"
           onClick={() => navigate(withPoliceId('/', policeId))}
         >
-          <i className="fa-solid fa-house" /> 返回主页
+          <GlassIcon icon="fa-solid fa-house" size="xs" tone="mint" /> 返回主页
         </button>
       </header>
       <div className="side-layout-body">
@@ -102,7 +103,11 @@ const SideNavLayout = ({ icon, title, subtitle, iframeSrc, iframeAllow = 'microp
               }
             }}
           >
-            <i className={`fa-solid ${sidebarVisible ? 'fa-chevron-left' : 'fa-chevron-right'}`} />
+            <GlassIcon
+              icon={`fa-solid ${sidebarVisible ? 'fa-chevron-left' : 'fa-chevron-right'}`}
+              size="xs"
+              tone="cool"
+            />
           </div>
           {navSections.map((section) => (
             <div key={section.title}>
@@ -120,7 +125,7 @@ const SideNavLayout = ({ icon, title, subtitle, iframeSrc, iframeAllow = 'microp
                         navigateTo(item.path, item.moduleId);
                       }}
                     >
-                      <i className={item.icon} />
+                      <GlassIcon icon={item.icon} size="sm" tone={item.tone || 'cool'} floating={activeModule.startsWith(item.moduleId)} />
                       {item.label}
                     </a>
                   </li>
