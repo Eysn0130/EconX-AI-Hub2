@@ -23,8 +23,12 @@
 }
 
 .back-iframe-logo i {
-  font-size: 1.9rem;
   margin-right: 0.9rem;
+}
+
+.back-iframe-logo .glass-icon {
+  width: 46px;
+  height: 46px;
 }
 
 .back-iframe-title {
@@ -49,6 +53,12 @@
   display: flex;
   align-items: center;
   gap: 0.4rem;
+}
+
+.back-iframe-button .glass-icon {
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(248, 184, 180, 0.8));
 }
 
 .back-iframe-button:hover {

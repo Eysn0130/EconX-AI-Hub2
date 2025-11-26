@@ -47,10 +47,18 @@
 }
 
 .stats-header-icon {
-  font-size: 1.9rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
   margin-right: 0.9rem;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   animation: pulse 2s infinite alternate;
+}
+
+.stats-header-icon.glass-icon {
+  width: 46px;
+  height: 46px;
 }
 
 .stats-title-text {
@@ -225,9 +233,15 @@
 }
 
 .stats-summary-icon {
-  font-size: 2rem;
-  margin-bottom: 0.75rem;
-  opacity: 0.8;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.9rem;
+}
+
+.stats-summary-icon .glass-icon {
+  width: 44px;
+  height: 44px;
 }
 
 .stats-summary-value {
@@ -268,6 +282,18 @@
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.stats-card-header i {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stats-card-header .glass-icon {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(141, 181, 241, 0.85));
 }
 
 .stats-card-body {

@@ -70,3 +70,212 @@ a {
 ul {
   list-style: none;
 }
+
+/* 通用毛玻璃立体图标体系 */
+.glass-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 14px;
+  color: #0f2a5f;
+  background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.92), rgba(214, 230, 255, 0.82)),
+    linear-gradient(145deg, rgba(12, 46, 102, 0.16), rgba(52, 152, 219, 0.14));
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow:
+    0 18px 42px rgba(12, 46, 102, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75),
+    inset 0 -8px 20px rgba(4, 24, 55, 0.35);
+  backdrop-filter: blur(16px) saturate(1.35);
+  -webkit-backdrop-filter: blur(16px) saturate(1.35);
+  isolation: isolate;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  perspective: 700px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease, filter 0.3s ease;
+}
+
+.glass-icon::before {
+  content: '';
+  position: absolute;
+  inset: -15%;
+  background: conic-gradient(from 120deg, rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0.05), rgba(12, 46, 102, 0.2), rgba(255, 255, 255, 0.5));
+  filter: blur(22px);
+  opacity: 0.8;
+  z-index: 0;
+}
+
+.glass-icon__halo,
+.glass-icon__shine {
+  position: absolute;
+  inset: 2px;
+  pointer-events: none;
+  border-radius: inherit;
+  z-index: 1;
+}
+
+.glass-icon__halo {
+  background: radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.12), rgba(12, 46, 102, 0)),
+    radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0));
+  mix-blend-mode: screen;
+  opacity: 0.85;
+}
+
+.glass-icon__shine {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 40%);
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.9),
+    inset 0 10px 22px rgba(255, 255, 255, 0.25);
+  opacity: 0.9;
+}
+
+.glass-icon__texture {
+  position: absolute;
+  inset: 5px;
+  border-radius: inherit;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.48) 0%, rgba(255, 255, 255, 0.06) 40%),
+    repeating-linear-gradient(45deg, rgba(15, 47, 107, 0.12) 0 6px, rgba(255, 255, 255, 0.12) 6px 12px);
+  mix-blend-mode: screen;
+  opacity: 0.65;
+  filter: saturate(1.1);
+  z-index: 2;
+  box-shadow: inset 0 0 12px rgba(10, 42, 91, 0.14);
+}
+
+.glass-icon__glyph,
+.glass-icon > .fa-solid,
+.glass-icon > .fa-brands {
+  position: relative;
+  z-index: 3;
+  font-size: 1rem;
+  color: inherit;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(10, 42, 91, 0.6));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 6px 14px rgba(10, 42, 91, 0.35));
+}
+
+.glass-icon:hover {
+  transform: translateY(-2px) scale(1.02) rotateX(4deg);
+  box-shadow:
+    0 24px 46px rgba(15, 52, 96, 0.28),
+    inset 0 2px 10px rgba(255, 255, 255, 0.75),
+    inset 0 -10px 16px rgba(12, 46, 102, 0.2);
+  filter: saturate(1.1);
+}
+
+.glass-icon--pulse {
+  animation: glassPulse 2.8s ease-in-out infinite;
+}
+
+@keyframes glassPulse {
+  0%,
+  100% {
+    box-shadow:
+      0 18px 42px rgba(12, 46, 102, 0.22),
+      inset 0 1px 0 rgba(255, 255, 255, 0.75),
+      inset 0 -8px 20px rgba(4, 24, 55, 0.32);
+  }
+  50% {
+    box-shadow:
+      0 24px 54px rgba(52, 152, 219, 0.32),
+      inset 0 2px 12px rgba(255, 255, 255, 0.85),
+      inset 0 -10px 22px rgba(12, 46, 102, 0.28);
+  }
+}
+
+.glass-icon--xs {
+  width: 26px;
+  height: 26px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+}
+
+.glass-icon--sm {
+  width: 32px;
+  height: 32px;
+  border-radius: 11px;
+}
+
+.glass-icon--lg {
+  width: 52px;
+  height: 52px;
+  border-radius: 17px;
+  font-size: 1.25rem;
+}
+
+.glass-icon--xl {
+  width: 70px;
+  height: 70px;
+  border-radius: 22px;
+  font-size: 1.4rem;
+}
+
+.glass-icon--floating {
+  box-shadow:
+    0 24px 60px rgba(13, 54, 108, 0.3),
+    inset 0 2px 8px rgba(255, 255, 255, 0.72),
+    inset 0 -10px 22px rgba(16, 57, 117, 0.28);
+  transform: translateY(-3px);
+}
+
+.glass-icon--tone-cool {
+  background: radial-gradient(circle at 28% 22%, rgba(255, 255, 255, 0.95), rgba(202, 223, 255, 0.82)),
+    linear-gradient(145deg, rgba(38, 97, 161, 0.35), rgba(73, 152, 232, 0.2));
+  color: #0c4fb7;
+}
+
+.glass-icon--tone-navy {
+  background: radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.9), rgba(178, 204, 255, 0.78)),
+    linear-gradient(145deg, rgba(9, 32, 65, 0.3), rgba(21, 82, 153, 0.28));
+  color: #0b2c63;
+}
+
+.glass-icon--tone-mint {
+  background: radial-gradient(circle at 24% 24%, rgba(255, 255, 255, 0.92), rgba(196, 245, 232, 0.82)),
+    linear-gradient(145deg, rgba(17, 140, 103, 0.28), rgba(11, 196, 156, 0.2));
+  color: #0c7359;
+}
+
+.glass-icon--tone-amber {
+  background: radial-gradient(circle at 20% 25%, rgba(255, 255, 255, 0.95), rgba(255, 228, 196, 0.82)),
+    linear-gradient(145deg, rgba(200, 112, 24, 0.3), rgba(244, 175, 87, 0.25));
+  color: #8b3d06;
+}
+
+.glass-icon--tone-rose {
+  background: radial-gradient(circle at 28% 20%, rgba(255, 255, 255, 0.95), rgba(255, 216, 223, 0.85)),
+    linear-gradient(145deg, rgba(178, 31, 100, 0.28), rgba(255, 105, 180, 0.25));
+  color: #8b1547;
+}
+
+.glass-icon--tone-violet {
+  background: radial-gradient(circle at 22% 18%, rgba(255, 255, 255, 0.95), rgba(224, 211, 255, 0.82)),
+    linear-gradient(145deg, rgba(66, 20, 135, 0.32), rgba(145, 86, 255, 0.22));
+  color: #4f1f8b;
+}
+
+.glass-icon--danger {
+  color: #7b0f1c;
+  background: radial-gradient(circle at 28% 20%, rgba(255, 255, 255, 0.94), rgba(255, 200, 200, 0.85)),
+    linear-gradient(145deg, rgba(207, 78, 78, 0.45), rgba(240, 95, 84, 0.35));
+  box-shadow:
+    0 18px 38px rgba(231, 76, 60, 0.32),
+    inset 0 2px 10px rgba(255, 255, 255, 0.5);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
